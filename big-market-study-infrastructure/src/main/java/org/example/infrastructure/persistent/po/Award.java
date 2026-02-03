@@ -11,7 +11,7 @@ public class Award {
     /**自增id */
     private Long id;
     /**抽奖奖品ID*/
-    private Long awardId;
+    private Integer awardId;
     /**奖品对接标识 */
     private String awardKey;
     /**奖品配置信息 */

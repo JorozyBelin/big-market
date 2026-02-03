@@ -2,6 +2,7 @@ package org.example.infrastructure.persistent.po;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -11,17 +12,17 @@ public class StrategyAward {
     /**策略ID*/
     private Long strategyId;
     /**抽奖奖品ID*/
-    private Long awardId;
+    private Integer awardId;
     /**抽奖奖品标题*/
     private String awardTitle;
     /**抽奖奖品副标题*/
     private String awardSubtitle;
     /**奖品库存总量*/
-    private Long awardCount;
+    private Integer awardCount;
     /**奖品库存剩余*/
-    private Long awardCountSurplus;
+    private Integer awardCountSurplus;
     /**奖品中奖概率*/
-    private Double awardCountRate;
+    private BigDecimal awardCountRate;
     /**排序*/
     private Long sort;
     /**创建时间*/
