@@ -3,6 +3,9 @@ package org.example.types.common;
 public class Constants {
 
     public final static String SPLIT = ",";
+    public final static String COLON = ":";
+    public final static String SPACE = " ";
+
 
     /**
      * 定义出缓存key的前缀标识，

@@ -5,8 +5,13 @@ package org.example.domain.strategy.service.armory;
  *
  */
 public interface IStrategyArmory {
-    public boolean assembleLotteryStrategy(Long StrategyId);
+    /**
+     * 装配抽奖策略配置
+     *
+     * @param strategyId 策略ID
+     * @return
+     */
+    boolean assembleLotteryStrategy(Long strategyId);
 
-    public Integer getRandomAwardId(Long strategyId);
 
 }

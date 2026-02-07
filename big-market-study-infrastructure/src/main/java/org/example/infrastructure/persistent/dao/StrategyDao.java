@@ -6,4 +6,5 @@ import org.example.infrastructure.persistent.po.Strategy;
 @Mapper
 public interface StrategyDao {
 
+    Strategy queryStrategyByStrategyId(Long strategyId);
 }
