@@ -7,4 +7,5 @@ import org.example.infrastructure.persistent.po.StrategyRule;
 public interface StrategyRuleDao {
     StrategyRule queryStrategyRuleByStrategyIdAndRuleWeight(Long strategyId, String ruleWeight);
 
+    StrategyRule queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel);
 }
