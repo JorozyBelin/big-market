@@ -22,10 +22,12 @@ public class RuleBlackListLogicFilter implements ILogicFilter<RuleActionEntity.R
     @Override
     public RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> filter(RuleMatterEntity ruleMatterEntity) {
         log.info("规则过滤-黑名单 userID={},awardId={},ruleModel={}", ruleMatterEntity.getUserId(), ruleMatterEntity.getAwardId(), ruleMatterEntity.getRuleModel());
+        // 查询规则值配置
         String ruleValue=strategyRepository.queryStrategyRuleValue(ruleMatterEntity.getStrategyId(), ruleMatterEntity.getAwardId(), ruleMatterEntity.getRuleModel());
         String[] splitRuleValue = ruleValue.split(Constants.COLON);
         Integer awardId = Integer.parseInt(splitRuleValue[0]);
         String[] userBlackList = splitRuleValue[1].split(Constants.SPLIT);
+        // 用户ID在黑名单中，规则拦截
         for (String userId : userBlackList) {
             if(userId.equals(ruleMatterEntity.getUserId())){
                 return RuleActionEntity.<RuleActionEntity.RaffleBeforeEntity>builder()

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.domain.strategy.model.entity.StrategyAwardEntity;
 import org.example.domain.strategy.model.entity.StrategyEntity;
 import org.example.domain.strategy.model.entity.StrategyRuleEntity;
+import org.example.domain.strategy.model.vo.StrategyAwardRuleModelVO;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.infrastructure.persistent.dao.StrategyAwardDao;
 import org.example.infrastructure.persistent.dao.StrategyDao;
@@ -123,7 +124,17 @@ public class StrategyRepository implements IStrategyRepository {
 
     @Override
     public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
-        StrategyRule strategyRule = strategyRuleDao.queryStrategyRuleValue(strategyId, awardId, ruleModel);
+        StrategyRule strategyRule= strategyRuleDao.queryStrategyRuleValue(strategyId, awardId, ruleModel);
         return strategyRule.getAwardValue();
+    }
+
+    @Override
+    public StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId) {
+        StrategyAward strategyAward = new StrategyAward();
+        strategyAward.setStrategyId(strategyId);
+        strategyAward.setAwardId(awardId);
+        StrategyAward strategyAwardEntity =strategyAwardDao.queryStrategyAwardRuleModels(strategyAward);
+        String ruleModels = strategyAwardEntity.getRuleModels();
+        return StrategyAwardRuleModelVO.builder().ruleModels(ruleModels).build();
     }
 }

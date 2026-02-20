@@ -13,6 +13,8 @@ public class StrategyAward {
     private Long strategyId;
     /**抽奖奖品ID*/
     private Integer awardId;
+    /**奖品规则模型*/
+    private String ruleModels;
     /**抽奖奖品标题*/
     private String awardTitle;
     /**抽奖奖品副标题*/

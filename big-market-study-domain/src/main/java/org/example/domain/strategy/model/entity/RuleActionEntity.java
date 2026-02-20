@@ -45,8 +45,10 @@ public class RuleActionEntity<T extends RuleActionEntity.RaffleEntity> {
     }
 
     // 抽奖之中
+    @EqualsAndHashCode(callSuper = true)
+    @Data
     static public class RaffleCenterEntity extends RaffleEntity {
-
+        private Integer luckAward=101;
     }
 
     // 抽奖之后
