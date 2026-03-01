@@ -68,7 +68,6 @@ public class StrategyRepository implements IStrategyRepository {
        //2、存储抽奖策略概率表
         Map<Integer, Integer> map = redisService.getMap(Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + strategyId);
         map.putAll(shuffleStrategyAwardSearchRateTable);
-
     }
 
     @Override
@@ -120,6 +119,11 @@ public class StrategyRepository implements IStrategyRepository {
                 .awardValue(strategyRule.getAwardValue())
                 .ruleDesc(strategyRule.getRuleDesc())
                 .build();
+    }
+
+    @Override
+    public String queryStrategyRuleModel(Long strategyId, String ruleModel) {
+        return queryStrategyRuleValue(strategyId, null, ruleModel);
     }
 
     @Override

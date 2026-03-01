@@ -11,9 +11,11 @@ import org.example.domain.strategy.model.entity.RuleActionEntity;
 import org.example.domain.strategy.model.entity.RuleMatterEntity;
 import org.example.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import org.example.domain.strategy.repository.IStrategyRepository;
+import org.example.domain.strategy.service.AbstractRaffleStrategy;
 import org.example.domain.strategy.service.armory.IStrategyDispatch;
-import org.example.domain.strategy.service.rule.ILogicFilter;
-import org.example.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import org.example.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
+import org.example.domain.strategy.service.rule.filter.ILogicFilter;
+import org.example.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
 
     @Autowired
     private IStrategyDispatch strategyDispatch;
@@ -32,8 +34,8 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
     @Autowired
     private DefaultLogicFactory logicFactory;
 
-    public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch) {
-        super(strategyRepository, strategyDispatch);
+    public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch,DefaultChainFactory defaultChainFactory) {
+        super(strategyRepository, strategyDispatch,defaultChainFactory);
     }
 
     @Override
