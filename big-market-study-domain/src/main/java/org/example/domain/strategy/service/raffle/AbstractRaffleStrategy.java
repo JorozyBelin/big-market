@@ -39,6 +39,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
         //2、查询策略
         StrategyEntity strategyEntity = strategyRepository.queryStrategyList(strategyId);
         //3、抽奖前----规则过滤
+        Integer awardId=null;
         RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> ruleActionEntity = this.doCheckBeforeRaffleLogic(raffleFactorEntity, strategyEntity.ruleModel());
         if (RuleLogicCheckTypeVO.TAKE_OVER.getCode().equals(ruleActionEntity.getCode())) {
             if (DefaultLogicFactory.LogicModel.RULE_BLACKLIST.getCode().equals(ruleActionEntity.getRuleModel())) {
@@ -50,14 +51,13 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
                 // 权重根据返回的信息进行抽奖
                 RuleActionEntity.RaffleBeforeEntity raffleBeforeEntity = ruleActionEntity.getData();
                 String ruleWeightValueKey = raffleBeforeEntity.getRuleWeightValueKey();
-                Integer awardId = strategyDispatch.getRandomAwardId(strategyId, ruleWeightValueKey);
-                return RaffleAwardEntity.builder()
-                        .awardId(awardId)
-                        .build();
+                awardId = strategyDispatch.getRandomAwardId(strategyId, ruleWeightValueKey);
             }
         }
         // 4. 默认抽奖流程
-        Integer awardId = strategyDispatch.getRandomAwardId(strategyId);
+        if(awardId==null) {
+            awardId = strategyDispatch.getRandomAwardId(strategyId);
+        }
         raffleFactorEntity.setAwardId(awardId);
         // 5. 查询奖品规则
         StrategyAwardRuleModelVO strategyAwardRuleModelVO = strategyRepository.queryStrategyAwardRuleModelVO(strategyId, awardId);
