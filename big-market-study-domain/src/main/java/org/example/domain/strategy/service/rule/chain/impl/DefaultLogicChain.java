@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component("default")
+@Component("rule_default")
 public class DefaultLogicChain extends AbstractLogicChain {
     @Autowired
     private StrategyArmoryDispatch strategyArmoryDispatch;
