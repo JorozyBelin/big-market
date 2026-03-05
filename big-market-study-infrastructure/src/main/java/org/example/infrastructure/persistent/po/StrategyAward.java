@@ -24,7 +24,7 @@ public class StrategyAward {
     /**奖品库存剩余*/
     private Integer awardCountSurplus;
     /**奖品中奖概率*/
-    private BigDecimal awardCountRate;
+    private BigDecimal awardRate;
     /**排序*/
     private Long sort;
     /**创建时间*/

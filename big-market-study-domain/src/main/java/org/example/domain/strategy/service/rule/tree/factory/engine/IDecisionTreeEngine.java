@@ -11,5 +11,5 @@ public interface IDecisionTreeEngine {
      * @param awardId    奖品ID
      * @return 抽奖结果
      */
-    DefaultTreeFactory.StrategyAwardData process(String userId, Long strategyId, Integer awardId);
+    DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId);
 }

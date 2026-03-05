@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.domain.strategy.service.armory.StrategyArmoryDispatch;
 import org.example.domain.strategy.service.rule.chain.AbstractLogicChain;
+import org.example.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import org.example.types.common.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,13 @@ import java.util.Map;
 @Component("rule_weight")
 public class RuleWeightLogicChain extends AbstractLogicChain {
     
-    private static final Long userScore=4500L;
+    private static  Long userScore=4500L;
     @Autowired
     private IStrategyRepository strategyRepository;
     @Autowired
     private StrategyArmoryDispatch strategyArmoryDispatch;
     @Override
-    public Integer logic(String userId, Long strategyId) {
+    public DefaultChainFactory.StrategyAwardVO logic(String userId, Long strategyId) {
         log.info("抽奖责任链-权重过滤：userId={},strategyId={}",userId,strategyId);
         String ruleValue = strategyRepository.queryStrategyRuleValue(strategyId, null, ruleModel());
         Map<Long, String> analyticalValueGroup = getAnalyticalValue(ruleValue);
@@ -39,7 +40,10 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
         if(null!=nextValue){
             Integer awardId = strategyArmoryDispatch.getRandomAwardId(strategyId, analyticalValueGroup.get(nextValue));
             log.info("抽奖责任链-权重接管：userId={},strategyId={},ruleModel={},awardId={}",userId,strategyId,ruleModel(),awardId);
-            return awardId;
+            return DefaultChainFactory.StrategyAwardVO.builder()
+                    .logicModel(DefaultChainFactory.LogicModel.RULE_WEIGHT.getCode())
+                    .awardId(awardId)
+                    .build();
         }
         //过滤其他责任链
         log.info("抽奖责任链-权重放行：userId={},strategyId={}",userId,strategyId);
@@ -48,7 +52,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
 
     @Override
     public String ruleModel() {
-        return "rule_weight";
+        return DefaultChainFactory.LogicModel.RULE_WEIGHT.getCode();
     }
 
     private Map<Long, String> getAnalyticalValue(String ruleValue) {
