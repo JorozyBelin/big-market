@@ -24,13 +24,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
 
-//    private IStrategyDispatch strategyDispatch;
-//
-//    private IStrategyRepository strategyRepository;
-//
-//    private DefaultChainFactory defaultChainFactory;
-//
-//    private DefaultTreeFactory defaultTreeFactory;
 
     public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch,DefaultChainFactory defaultChainFactory,DefaultTreeFactory defaultTreeFactory) {
         super(defaultChainFactory, defaultTreeFactory,strategyRepository,strategyDispatch);

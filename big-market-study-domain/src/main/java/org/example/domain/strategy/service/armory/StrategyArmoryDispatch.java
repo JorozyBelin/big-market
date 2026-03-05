@@ -52,12 +52,12 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
         if(strategyAwardEntities==null||strategyAwardEntities.isEmpty()) return false;
         //1、获取策略奖品列表中奖品中奖概率最小值
         BigDecimal minAwardRate = strategyAwardEntities.stream()
-                .map(StrategyAwardEntity::getAwardRate)
+                .map(StrategyAwardEntity::getAwardCountRate)
                 .min(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
         //2、获取概率值总和
         BigDecimal totalAwardRate = strategyAwardEntities.stream()
-                .map(StrategyAwardEntity::getAwardRate)
+                .map(StrategyAwardEntity::getAwardCountRate)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         log.info("策略奖品列表中奖品中奖概率最小值为:{}",minAwardRate);
         log.info("策略奖品列表中奖品中奖概率总和为:{}",totalAwardRate);
@@ -67,7 +67,7 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
         List<Integer> strategyAwardTable = new ArrayList<>();
         for (StrategyAwardEntity strategyAwardEntity : strategyAwardEntities) {
             Integer awardId = strategyAwardEntity.getAwardId();
-            BigDecimal awardCountRate = strategyAwardEntity.getAwardRate();
+            BigDecimal awardCountRate = strategyAwardEntity.getAwardCountRate();
             for(int i=0;i<rateRange.multiply(awardCountRate).setScale(0,RoundingMode.CEILING).intValue();i++){
                 strategyAwardTable.add(awardId);
             }

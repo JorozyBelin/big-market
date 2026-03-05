@@ -26,5 +26,5 @@ public class StrategyAwardEntity {
     /**奖品库存剩余*/
     private Integer awardCountSurplus;
     /**奖品中奖概率*/
-    private BigDecimal awardRate;
+    private BigDecimal awardCountRate;
 }
