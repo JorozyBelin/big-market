@@ -10,7 +10,6 @@ import org.example.domain.strategy.model.vo.RuleTreeVO;
 import org.example.domain.strategy.service.rule.tree.ILogicTreeNode;
 import org.example.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import org.example.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -46,8 +45,9 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
         while (ruleTreeNodeVO != null) {
             //获取决策树节点
             ILogicTreeNode logicTreeNode = treeNodeGroup.get(ruleTreeNodeVO.getRuleKey());
+            String ruleValue = ruleTreeNodeVO.getRuleValue();
             //计算决策树节点
-            DefaultTreeFactory.TreeActionEntity treeActionEntity = logicTreeNode.logic(userId, strategyId, awardId);
+            DefaultTreeFactory.TreeActionEntity treeActionEntity = logicTreeNode.logic(userId, strategyId, awardId,ruleValue);
             RuleLogicCheckTypeVO ruleLogicCheckType = treeActionEntity.getRuleLogicCheckType();
             strategyAwardData = treeActionEntity.getStrategyAwardVO();
             log.info("决策树引擎【{}】treeId:{} node:{} code:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(), nextNode, ruleLogicCheckType.getCode());
@@ -57,7 +57,6 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
         }
         return strategyAwardData;
     }
-
     /**
      * 找出下一个节点
      *
@@ -72,7 +71,8 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
                 return ruleTreeNodeLineVO.getRuleNodeTo();
             }
         }
-        throw new RuntimeException("决策树引擎，nextNode 计算失败，未找到可执行节点！");
+        //throw new RuntimeException("决策树引擎，nextNode 计算失败，未找到可执行节点！");
+        return null;
     }
 
     /**

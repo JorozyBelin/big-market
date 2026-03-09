@@ -1,34 +1,36 @@
 package org.example.domain.strategy.service.rule.chain.factory;
 
 import lombok.*;
+import org.example.domain.strategy.model.entity.StrategyAwardEntity;
 import org.example.domain.strategy.model.entity.StrategyEntity;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.domain.strategy.service.rule.chain.ILogicChain;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class DefaultChainFactory {
-    private final Map<String , ILogicChain> logicChainMap;
+    private final Map<String, ILogicChain> logicChainMap;
 
     private final IStrategyRepository strategyRepository;
 
-    public DefaultChainFactory(Map<String , ILogicChain> logicChainMap, IStrategyRepository strategyRepository){
+    public DefaultChainFactory(Map<String, ILogicChain> logicChainMap, IStrategyRepository strategyRepository) {
         this.logicChainMap = logicChainMap;
         this.strategyRepository = strategyRepository;
     }
 
-    public ILogicChain openLogicChain(Long strategyId){
+    public ILogicChain openLogicChain(Long strategyId) {
         StrategyEntity strategyEntity = strategyRepository.queryStrategyList(strategyId);
         String[] ruleModel = strategyEntity.ruleModel();
         //如果没有规则模型，则使用默认规则
-        if(ruleModel == null|| ruleModel.length == 0){
+        if (ruleModel == null || ruleModel.length == 0) {
             return logicChainMap.get(LogicModel.RULE_DEFAULT.getCode());
         }
         // 按照配置顺序装填用户配置的责任链
         ILogicChain logicChain = logicChainMap.get(ruleModel[0]);
-        ILogicChain current=logicChain;
+        ILogicChain current = logicChain;
         for (int i = 1; i < ruleModel.length; i++) {
             current = current.appendNext(logicChainMap.get(ruleModel[i]));
         }
@@ -36,14 +38,19 @@ public class DefaultChainFactory {
         current.appendNext(logicChainMap.get(LogicModel.RULE_DEFAULT.getCode()));
         return logicChain;
     }
+
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class StrategyAwardVO {
-        /** 抽奖奖品ID - 内部流转使用 */
+        /**
+         * 抽奖奖品ID - 内部流转使用
+         */
         private Integer awardId;
-        /**  */
+        /**
+         *
+         */
         private String logicModel;
     }
 

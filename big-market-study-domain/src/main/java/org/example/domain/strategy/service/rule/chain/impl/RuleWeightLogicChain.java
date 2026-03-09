@@ -18,7 +18,7 @@ import java.util.Map;
 @Component("rule_weight")
 public class RuleWeightLogicChain extends AbstractLogicChain {
     
-    private static  Long userScore=4500L;
+    private static Long userScore=4500L;
     @Autowired
     private IStrategyRepository strategyRepository;
     @Autowired

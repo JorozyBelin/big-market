@@ -16,7 +16,7 @@ import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 
 @Slf4j
-public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
+public abstract class AbstractRaffleStrategy implements IRaffleStrategy,IRaffleStock {
 
     //仓储
     protected IStrategyRepository strategyRepository;
