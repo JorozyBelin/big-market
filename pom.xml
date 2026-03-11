@@ -13,6 +13,7 @@
         <module>big-market-study-trigger</module>
         <module>big-market-study-infrastructure</module>
         <module>big-market-study-types</module>
+        <module>big-market-study-api</module>
     </modules>
 
     <repositories>

@@ -19,6 +19,10 @@ public class StrategyAwardEntity {
     private Long strategyId;
     /**抽奖奖品ID*/
     private Integer awardId;
+    /** 抽奖奖品标题 */
+    private String awardTitle;
+    /** 抽奖奖品副标题 */
+    private String awardSubtitle;
     /**奖品规则模型*/
     private String ruleModels;
     /**奖品库存总量*/
@@ -27,4 +31,7 @@ public class StrategyAwardEntity {
     private Integer awardCountSurplus;
     /**奖品中奖概率*/
     private BigDecimal awardCountRate;
+    /** 排序 */
+    private Integer sort;
+
 }
