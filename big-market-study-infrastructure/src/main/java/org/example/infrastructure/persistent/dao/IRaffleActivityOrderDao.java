@@ -17,7 +17,7 @@ public interface IRaffleActivityOrderDao {
      * @return      领取结果
      */
     @DBRouter(key = "userId")
-    int insertActivityOrder(RaffleActivityOrder order);
+    int insert(RaffleActivityOrder order);
 
     /**
      * 根据用户ID查询活动领取记录
