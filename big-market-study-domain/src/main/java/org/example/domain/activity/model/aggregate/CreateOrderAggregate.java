@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.domain.activity.model.entity.ActivityOrderEntity;
 
+/**
+ * 创建订单聚合
+ */
 @Data
 @Builder
 @AllArgsConstructor

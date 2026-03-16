@@ -43,11 +43,6 @@ public class ActivityEntity {
     private Date endDateTime;
 
     /**
-     * 活动参与次数配置
-     */
-    private Long activityCountId;
-
-    /**
      * 抽奖策略ID
      */
     private Long strategyId;

@@ -32,7 +32,7 @@ public class ActivityBaseActionChain extends AbstractActionChain {
         }
 
         //3、校验活动库存
-        if(activityCountEntity.getTotalCount() <= 0){
+        if(activitySkuEntity.getStockCount() <= 0){
             throw new AppException(ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getCode(), ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getInfo());
         }
         return next().doAction(activitySkuEntity, activityEntity, activityCountEntity);

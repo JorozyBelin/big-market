@@ -2,6 +2,11 @@ package org.example.domain.activity.service;
 
 import org.example.domain.activity.model.vo.ActivitySkuStockKeyVO;
 
+/**
+ * 活动商品库存服务
+ *
+ * @author xueji
+ */
 public interface ISkuStock {
     /**
      * 获取活动sku库存消耗队列
