@@ -1,9 +1,8 @@
 package org.example.domain.activity.repository;
 
-import org.example.domain.activity.model.aggregate.CreateOrderAggregate;
-import org.example.domain.activity.model.entity.ActivityCountEntity;
-import org.example.domain.activity.model.entity.ActivityEntity;
-import org.example.domain.activity.model.entity.ActivitySkuEntity;
+import org.example.domain.activity.model.aggregate.CreatePartakeOrderAggregate;
+import org.example.domain.activity.model.aggregate.CreateQuotaOrderAggregate;
+import org.example.domain.activity.model.entity.*;
 import org.example.domain.activity.model.vo.ActivitySkuStockKeyVO;
 
 import java.util.Date;
@@ -20,7 +19,7 @@ public interface IActivityRepository {
 
     ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId);
 
-    void doSaveOrder(CreateOrderAggregate createOrderAggregate);
+    void doSaveOrder(CreateQuotaOrderAggregate createQuotaOrderAggregate);
 
     /**
      * 缓存活动商品库存信息
@@ -68,4 +67,43 @@ public interface IActivityRepository {
      * @param sku 商品ID
      */
     void clearActivitySkuStock(Long sku);
+
+    /**
+     * 查询未使用的订单
+     * @param partakeRaffleActivityEntity 参与抽奖活动信息
+     * @return 订单信息
+     */
+    UserRaffleOrderEntity queryNoUserdOrder(PartakeRaffleActivityEntity partakeRaffleActivityEntity);
+
+    /**
+     * 保存聚合对象
+     * @param createPartakeOrderAggregate 聚合对象
+     */
+    void savePartakeOrderAggregate(CreatePartakeOrderAggregate createPartakeOrderAggregate);
+
+    /**
+     * 查询活动账户信息
+     * @param userId 用户ID
+     * @param activityId 活动ID
+     * @return 活动账户信息
+     */
+    ActivityAccountEntity queryActivityAccountByUserId(String userId, Long activityId);
+
+    /**
+     * 查询活动账户月信息
+     * @param userId 用户ID
+     * @param activityId 活动ID
+     * @param month 月份
+     * @return 活动账户月信息
+     */
+    ActivityAccountMonthEntity queryActivityAccountMonthByUserId(String userId, Long activityId, String month);
+
+    /**
+     * 查询活动账户日信息
+     * @param userId 用户ID
+     * @param activityId 活动ID
+     * @param day  日
+     * @return 活动账户日信息
+     */
+    ActivityAccountDayEntity queryActivityAccountDayByUserId(String userId, Long activityId, String day);
 }

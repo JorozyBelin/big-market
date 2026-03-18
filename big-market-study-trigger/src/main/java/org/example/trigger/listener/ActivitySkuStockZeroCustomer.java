@@ -3,7 +3,7 @@ package org.example.trigger.listener;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
-import org.example.domain.activity.service.ISkuStock;
+import org.example.domain.activity.service.IRaffleActivitySkuStockService;
 import org.example.types.event.BaseEvent;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -11,14 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 @Slf4j
 @Component
 public class ActivitySkuStockZeroCustomer {
 
     @Value ("${spring.rabbitmq.topic.activity_sku_stock_zero}")
     String topic;
-    @Autowired
-    private ISkuStock skuStock;
+    @Resource
+    private IRaffleActivitySkuStockService skuStock;
     @RabbitListener(queuesToDeclare = @Queue(value = "activity_sku_stock_zero"))
     public void listener(String message){
         try{
