@@ -34,7 +34,7 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
         ActivityEntity activityEntity = queryRaffleActivityByActivityId(activitySkuEntity.getActivityId());
         ActivityCountEntity activityCountEntity = queryRaffleActivityCountByActivityCountId(activitySkuEntity.getActivityCountId());
 
-        //3、活动信息校验
+        //3、活动信息校验,活动库存扣减
         IActionChain activityChain = defaultActivityChainFactory.openActivityChain();
         activityChain.doAction(activitySkuEntity, activityEntity, activityCountEntity);
 

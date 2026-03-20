@@ -49,7 +49,6 @@ public class RaffleActivityService extends AbstractRaffleActivity implements IRa
                 .monthCount(activityCountEntity.getMonthCount())
                 .activityOrderEntity(activityOrderEntity)
                 .build();
-
     }
 
     @Override
