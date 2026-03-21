@@ -59,6 +59,12 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
         return true;
     }
 
+    @Override
+    public boolean assembleLotteryStrategyByActivityId(Long activityId) {
+        Long strategyId = strategyRepository.queryStrategyIdByActivityId(activityId);
+        return assembleLotteryStrategy(strategyId);
+    }
+
     public boolean assembleLotteryStrategy(String key, List<StrategyAwardEntity> strategyAwardEntities) {
         if (strategyAwardEntities == null || strategyAwardEntities.isEmpty()) return false;
         //1、获取策略奖品列表中奖品中奖概率最小值

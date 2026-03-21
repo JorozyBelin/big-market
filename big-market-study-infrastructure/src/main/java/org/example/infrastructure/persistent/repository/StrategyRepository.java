@@ -44,6 +44,10 @@ public class StrategyRepository implements IStrategyRepository {
     private IRuleTreeNodeDao ruleTreeNodeDao;
     @Autowired
     private IRuleTreeNodeLineDao ruleTreeNodeLineDao;
+    @Autowired
+    private IRaffleActivityAccountDayDao raffleActivityAccountDayDao;
+    @Autowired
+    private IRaffleActivityDao raffleActivityDao;
     @Override
     public List<StrategyAwardEntity> queryStrategyAwardList(Long strategyId) {
         String cacheKey= Constants.RedisKey.STRATEGY_AWARD_LIST_KEY+strategyId;
@@ -260,22 +264,43 @@ public class StrategyRepository implements IStrategyRepository {
         StrategyAward strategyAward = new StrategyAward();
         strategyAward.setStrategyId(strategyId);
         strategyAward.setAwardId(awardId);
-        strategyAward=strategyAwardDao.queryStrategyAward(strategyAward);
+        StrategyAward strategyAwardDB=strategyAwardDao.queryStrategyAward(strategyAward);
 
         StrategyAwardEntity strategyAwardEntity = StrategyAwardEntity.builder()
                 .sort(strategyAward.getSort())
-                .awardCount(strategyAward.getAwardCount())
-                .awardCountRate(strategyAward.getAwardCountRate())
-                .awardCountSurplus(strategyAward.getAwardCountSurplus())
-                .awardId(strategyAward.getAwardId())
-                .awardSubtitle(strategyAward.getAwardSubtitle())
-                .awardTitle(strategyAward.getAwardTitle())
-                .ruleModels(strategyAward.getRuleModels())
-                .strategyId(strategyAward.getStrategyId())
+                .awardCount(strategyAwardDB.getAwardCount())
+                .awardCountRate(strategyAwardDB.getAwardCountRate())
+                .awardCountSurplus(strategyAwardDB.getAwardCountSurplus())
+                .awardId(strategyAwardDB.getAwardId())
+                .awardSubtitle(strategyAwardDB.getAwardSubtitle())
+                .awardTitle(strategyAwardDB.getAwardTitle())
+                .ruleModels(strategyAwardDB.getRuleModels())
+                .strategyId(strategyAwardDB.getStrategyId())
                 .build();
         //缓存结果
         redisService.setValue(cacheKey, strategyAwardEntity);
         return strategyAwardEntity;
+    }
+
+    @Override
+    public Long queryStrategyIdByActivityId(Long activityId) {
+        return raffleActivityDao.queryStrategyIdByActivityId(activityId);
+    }
+
+    @Override
+    public Integer queryTodayUserRaffleCount(String userId, Long strategyId) {
+        // 活动ID
+        Long activityId = raffleActivityAccountDayDao.queryActivityIdByStrategyId(strategyId);
+        // 封装参数
+        RaffleActivityAccountDay raffleActivityAccountDayReq = new RaffleActivityAccountDay();
+        raffleActivityAccountDayReq.setUserId(userId);
+        raffleActivityAccountDayReq.setActivityId(activityId);
+        raffleActivityAccountDayReq.setDay(raffleActivityAccountDayReq.currentDay());
+        RaffleActivityAccountDay raffleActivityAccountDay = raffleActivityAccountDayDao.queryActivityAccountDayByUserId(raffleActivityAccountDayReq);
+        if (null == raffleActivityAccountDay) return 0;
+        // 总次数 - 剩余的，等于今日参与的
+        return raffleActivityAccountDay.getDayCount() - raffleActivityAccountDay.getDayCountSurplus();
+
     }
 
 }

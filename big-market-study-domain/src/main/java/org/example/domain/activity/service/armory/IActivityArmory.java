@@ -12,4 +12,11 @@ public interface IActivityArmory {
      * @return
      */
    boolean assembleActivity(Long sku);
+
+   /**
+     * 批量组装活动
+     *
+     * @param activityId
+     */
+    boolean assembleActivitySkuByActivityId(Long activityId);
 }

@@ -6,6 +6,7 @@ import org.example.domain.activity.model.entity.*;
 import org.example.domain.activity.model.vo.ActivitySkuStockKeyVO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 抽奖活动仓库
@@ -106,4 +107,11 @@ public interface IActivityRepository {
      * @return 活动账户日信息
      */
     ActivityAccountDayEntity queryActivityAccountDayByUserId(String userId, Long activityId, String day);
+
+    /**
+     * 查询活动商品信息
+     * @param activityId 活动ID
+     * @return 活动商品信息
+     */
+    List<ActivitySkuEntity> queryActivitySkuListByActivityId(Long activityId);
 }

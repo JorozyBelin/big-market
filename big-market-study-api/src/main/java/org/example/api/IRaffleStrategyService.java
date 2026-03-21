@@ -1,14 +1,14 @@
 package org.example.api;
 
 import org.example.api.dto.RaffleAwardListDTO;
-import org.example.api.dto.RaffleDTO;
+import org.example.api.dto.RaffleStrategyDTO;
 import org.example.api.vo.RaffleAwardListVO;
-import org.example.api.vo.RaffleVO;
+import org.example.api.vo.RaffleStrategyVO;
 import org.example.types.model.Response;
 
 import java.util.List;
 
-public interface IRaffleService {
+public interface IRaffleStrategyService {
     /**
      * 抽奖策略装配
      * @param strategyId 策略ID
@@ -25,8 +25,8 @@ public interface IRaffleService {
 
     /**
      * 随机抽奖
-     * @param raffleDTO 抽奖参数
+     * @param raffleStrategyDTO 抽奖参数
      * @return 抽奖结果
      */
-    Response<RaffleVO> randomRaffle(RaffleDTO raffleDTO);
+    Response<RaffleStrategyVO> randomRaffle(RaffleStrategyDTO raffleStrategyDTO);
 }

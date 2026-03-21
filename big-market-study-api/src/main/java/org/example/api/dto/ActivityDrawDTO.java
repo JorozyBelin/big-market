@@ -1,15 +1,17 @@
-package org.example.domain.activity.model.entity;
+package org.example.api.dto;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * 参与抽奖活动实体对象
- */
 @Data
 @Builder
-public class PartakeRaffleActivityEntity {
+@AllArgsConstructor
+@NoArgsConstructor
 
+public class ActivityDrawDTO {
     /**
      * 用户ID
      */
@@ -19,5 +21,7 @@ public class PartakeRaffleActivityEntity {
      * 活动ID
      */
     private Long activityId;
+
+
 
 }

@@ -2,11 +2,11 @@ package org.example.trigger.http;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.example.api.IRaffleService;
+import org.example.api.IRaffleStrategyService;
 import org.example.api.dto.RaffleAwardListDTO;
-import org.example.api.dto.RaffleDTO;
+import org.example.api.dto.RaffleStrategyDTO;
 import org.example.api.vo.RaffleAwardListVO;
-import org.example.api.vo.RaffleVO;
+import org.example.api.vo.RaffleStrategyVO;
 import org.example.domain.strategy.model.entity.RaffleAwardEntity;
 import org.example.domain.strategy.model.entity.RaffleFactorEntity;
 import org.example.domain.strategy.model.entity.StrategyAwardEntity;
@@ -26,7 +26,7 @@ import java.util.List;
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/raffle")
 @Slf4j
-public class RaffleController implements IRaffleService {
+public class RaffleStrategyController implements IRaffleStrategyService {
     @Autowired
     private IStrategyArmory strategyArmory;
     @Autowired
@@ -86,35 +86,35 @@ public class RaffleController implements IRaffleService {
 
     @Override
     @PostMapping("/random_raffle")
-    public Response<RaffleVO> randomRaffle(@RequestBody RaffleDTO raffleDTO) {
+    public Response<RaffleStrategyVO> randomRaffle(@RequestBody RaffleStrategyDTO raffleStrategyDTO) {
         try {
-            log.info("随机抽奖开始 strategyId: {}", raffleDTO.getStrategyId());
+            log.info("随机抽奖开始 strategyId: {}", raffleStrategyDTO.getStrategyId());
             // 调用抽奖接口
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
                     .userId("system")
-                    .strategyId(raffleDTO.getStrategyId())
+                    .strategyId(raffleStrategyDTO.getStrategyId())
                     .build());
             // 封装返回结果
-            Response<RaffleVO> response = Response.<RaffleVO>builder()
+            Response<RaffleStrategyVO> response = Response.<RaffleStrategyVO>builder()
                     .code(ResponseCode.SUCCESS.getCode())
                     .info(ResponseCode.SUCCESS.getInfo())
-                    .data(RaffleVO.builder()
+                    .data(RaffleStrategyVO.builder()
                             .awardId(raffleAwardEntity.getAwardId())
                             .awardIndex(raffleAwardEntity.getSort())
                             .build())
                     .build();
-            log.info("随机抽奖完成 strategyId: {} response: {}", raffleDTO.getStrategyId(), JSON.toJSONString(response));
+            log.info("随机抽奖完成 strategyId: {} response: {}", raffleStrategyDTO.getStrategyId(), JSON.toJSONString(response));
             return response;
 
         } catch (AppException e) {
-            log.error("随机抽奖失败 strategyId：{} {}", raffleDTO.getStrategyId(), e.getInfo());
-            return Response.<RaffleVO>builder()
+            log.error("随机抽奖失败 strategyId：{} {}", raffleStrategyDTO.getStrategyId(), e.getInfo());
+            return Response.<RaffleStrategyVO>builder()
                     .code(e.getCode())
                     .info(e.getInfo())
                     .build();
         } catch (Exception e) {
-            log.error("随机抽奖失败 strategyId：{}", raffleDTO.getStrategyId(), e);
-            return Response.<RaffleVO>builder()
+            log.error("随机抽奖失败 strategyId：{}", raffleStrategyDTO.getStrategyId(), e);
+            return Response.<RaffleStrategyVO>builder()
                     .code(ResponseCode.UN_ERROR.getCode())
                     .info(ResponseCode.UN_ERROR.getInfo())
                     .build();

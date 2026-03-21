@@ -29,4 +29,12 @@ public interface IRaffleActivityAccountDayDao {
      */
     @DBRouter
     RaffleActivityAccountDay queryActivityAccountDayByUserId(RaffleActivityAccountDay raffleActivityAccountDayReq);
+
+    /**
+     * 查询活动ID
+     * @param strategyId
+     * @return
+     */
+    @DBRouter
+    Long queryActivityIdByStrategyId(Long strategyId);
 }
