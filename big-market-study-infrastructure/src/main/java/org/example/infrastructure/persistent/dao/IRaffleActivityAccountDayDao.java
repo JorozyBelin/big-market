@@ -37,4 +37,12 @@ public interface IRaffleActivityAccountDayDao {
      */
     @DBRouter
     Long queryActivityIdByStrategyId(Long strategyId);
+
+    /**
+     * 查询用户参与活动次数
+     * @param raffleActivityAccountDay
+     * @return
+     */
+    @DBRouter
+    Integer queryActivityAccountDayPartakeCount(RaffleActivityAccountDay raffleActivityAccountDay);
 }

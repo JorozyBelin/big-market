@@ -6,6 +6,7 @@ import org.example.domain.activity.model.entity.*;
 import org.example.domain.activity.model.vo.ActivitySkuStockKeyVO;
 import org.example.domain.activity.model.vo.OrderStateVO;
 import org.example.domain.activity.repository.IActivityRepository;
+import org.example.domain.activity.service.IRaffleActivityPartakeService;
 import org.example.domain.activity.service.IRaffleActivitySkuStockService;
 import org.example.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 import org.springframework.stereotype.Service;

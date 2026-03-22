@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,5 +22,7 @@ public class RaffleAwardEntity {
     private Integer sort;
     /** 奖品标题 */
     private String awardTitle;
+    /** 奖品失效时间 */
+    private Date endDateTime;
 
 }

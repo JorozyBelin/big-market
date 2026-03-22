@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 策略奖品实体
@@ -33,5 +34,7 @@ public class StrategyAwardEntity {
     private BigDecimal awardCountRate;
     /** 排序 */
     private Integer sort;
+    /** 活动结束时间 */
+    private Date endDateTime;
 
 }

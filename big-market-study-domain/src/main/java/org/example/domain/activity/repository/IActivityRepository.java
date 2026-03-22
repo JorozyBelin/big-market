@@ -114,4 +114,12 @@ public interface IActivityRepository {
      * @return 活动商品信息
      */
     List<ActivitySkuEntity> queryActivitySkuListByActivityId(Long activityId);
+
+    /**
+     * 查询用户参与活动日参与次数
+     * @param userId
+     * @param activityId
+     * @return
+     */
+    Integer queryActivityAccountDayPartakeCount(String userId, Long activityId);
 }

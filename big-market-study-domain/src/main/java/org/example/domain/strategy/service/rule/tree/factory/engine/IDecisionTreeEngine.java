@@ -2,6 +2,8 @@ package org.example.domain.strategy.service.rule.tree.factory.engine;
 
 import org.example.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 
+import java.util.Date;
+
 public interface IDecisionTreeEngine {
     /**
      * 决策树执行
@@ -11,5 +13,5 @@ public interface IDecisionTreeEngine {
      * @param awardId    奖品ID
      * @return 抽奖结果
      */
-    DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId);
+    DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId, Date endDateTime);
 }

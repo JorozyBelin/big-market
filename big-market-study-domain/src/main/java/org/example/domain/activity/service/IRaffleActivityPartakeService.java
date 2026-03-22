@@ -24,4 +24,13 @@ public interface IRaffleActivityPartakeService {
      * @return 用户抽奖订单实体对象
      */
     UserRaffleOrderEntity createOrder(String userId, Long activityId);
+
+    /**
+     * 查询用户某天参与抽奖活动次数
+     *
+     * @param userId 用户ID
+     * @param activityId 活动ID
+     * @return 用户某天参与抽奖活动次数
+     */
+    Integer queryRaffleActivityAccountDayPartakeCount(String userId, Long activityId);
 }

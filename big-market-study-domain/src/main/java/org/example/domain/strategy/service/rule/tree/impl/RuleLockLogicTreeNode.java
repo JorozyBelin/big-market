@@ -7,6 +7,9 @@ import org.example.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import org.example.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
+
 /**
  * 抽奖中规则树次数锁节点
  */
@@ -16,7 +19,7 @@ public class RuleLockLogicTreeNode implements ILogicTreeNode {
     @Autowired
     private IStrategyRepository strategyRepository;
     @Override
-    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId, String ruleValue) {
+    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId, String ruleValue, Date endDatetime) {
         log.info("规则过滤-次数锁 userId:{} strategyId:{} awardId:{}", userId, strategyId, awardId);
         long raffleCount = 0L;
         try {

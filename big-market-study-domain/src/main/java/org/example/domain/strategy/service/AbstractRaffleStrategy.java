@@ -16,6 +16,7 @@ import org.example.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -55,7 +56,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy{
         }
         Integer awardId = chainStrategyAwardVO.getAwardId();
         // 3. 规则树抽奖过滤
-        DefaultTreeFactory.StrategyAwardVO treeStrategyAwardVO = raffleLogicTree(userId, strategyId, awardId);
+        DefaultTreeFactory.StrategyAwardVO treeStrategyAwardVO = raffleLogicTree(userId, strategyId, awardId, raffleFactorEntity.getEndDatetime());
         log.info("抽奖策略计算-规则树 {} {} {} {}", userId, strategyId, treeStrategyAwardVO.getAwardId(), treeStrategyAwardVO.getAwardRuleValue());
 
         // 4. 返回抽奖结果
@@ -76,4 +77,6 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy{
     public abstract DefaultChainFactory.StrategyAwardVO raffleLogicChain(String userId, Long strategyId);
 
     public abstract DefaultTreeFactory.StrategyAwardVO raffleLogicTree(String userId, Long strategyId, Integer awardId);
+
+    public abstract DefaultTreeFactory.StrategyAwardVO raffleLogicTree(String userId, Long strategyId, Integer awardId, Date endDatetime);
 }

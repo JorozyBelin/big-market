@@ -11,4 +11,11 @@ public interface IRaffleAward {
      * @return 策略奖品列表
      */
     List<StrategyAwardEntity> queryStrategyAwardList(Long strategyId);
+
+    /**
+     * 根据活动ID查询策略奖品列表
+     * @param activityId 活动ID
+     * @return 策略奖品列表
+     */
+    List<StrategyAwardEntity> queryStrategyAwardListByActivityId(Long activityId);
 }

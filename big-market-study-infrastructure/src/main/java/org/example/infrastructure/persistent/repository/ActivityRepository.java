@@ -445,4 +445,15 @@ public class ActivityRepository implements IActivityRepository {
 
     }
 
+    @Override
+    public Integer queryActivityAccountDayPartakeCount(String userId, Long activityId) {
+        RaffleActivityAccountDay raffleActivityAccountDay = new RaffleActivityAccountDay();
+        raffleActivityAccountDay.setUserId(userId);
+        raffleActivityAccountDay.setActivityId(activityId);
+        raffleActivityAccountDay.setDay(raffleActivityAccountDay.currentDay());
+        Integer dayPartakeCount = raffleActivityAccountDayDao.queryActivityAccountDayPartakeCount(raffleActivityAccountDay);
+        //未参与抽奖返回0次
+        return dayPartakeCount==null ? 0 :dayPartakeCount;
+    }
+
 }

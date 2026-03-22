@@ -4,12 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.domain.strategy.model.vo.RuleLogicCheckTypeVO;
 import org.example.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 import org.example.domain.strategy.repository.IStrategyRepository;
-import org.example.domain.strategy.service.armory.IStrategyDispatch;
 import org.example.domain.strategy.service.armory.StrategyArmoryDispatch;
 import org.example.domain.strategy.service.rule.tree.ILogicTreeNode;
 import org.example.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * 决策树节点-库存
@@ -23,10 +24,10 @@ public class RuleStockLogicTreeNode implements ILogicTreeNode {
     private IStrategyRepository strategyRepository;
 
     @Override
-    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId, String ruleValue) {
+    public DefaultTreeFactory.TreeActionEntity logic(String userId, Long strategyId, Integer awardId, String ruleValue, Date endDatetime) {
         log.info("规则过滤-库存扣减 userId:{} strategyId:{} awardId:{}", userId, strategyId, awardId);
         //库存扣减
-        Boolean status = strategyArmoryDispatch.subtractionAwardStock(strategyId, awardId);
+        Boolean status = strategyArmoryDispatch.subtractionAwardStock(strategyId, awardId,endDatetime);
         // True,库存扣减成功，规则节点接管，返回奖品
         if (status) {
             log.info("规则过滤-库存扣减-成功 userId:{} strategyId:{} awardId:{}", userId, strategyId, awardId);

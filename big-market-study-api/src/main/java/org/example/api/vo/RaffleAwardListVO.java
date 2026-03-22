@@ -19,6 +19,10 @@ public class RaffleAwardListVO {
     private String awardSubtitle;
     // 排序编号
     private Integer sort;
-
-
+    //奖品次数规则-抽奖n次后解锁，未配置为空
+    private Integer awardRuleLockCount;
+    // 奖品是否解锁
+    Boolean isAwardUnlock;
+    // 待解锁次数
+    private Integer waitUnlockCount;
 }

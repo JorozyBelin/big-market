@@ -2,15 +2,18 @@ package org.example.trigger.http;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.example.api.IRaffleStrategyService;
 import org.example.api.dto.RaffleAwardListDTO;
 import org.example.api.dto.RaffleStrategyDTO;
 import org.example.api.vo.RaffleAwardListVO;
 import org.example.api.vo.RaffleStrategyVO;
+import org.example.domain.activity.service.IRaffleActivityPartakeService;
 import org.example.domain.strategy.model.entity.RaffleAwardEntity;
 import org.example.domain.strategy.model.entity.RaffleFactorEntity;
 import org.example.domain.strategy.model.entity.StrategyAwardEntity;
 import org.example.domain.strategy.service.IRaffleAward;
+import org.example.domain.strategy.service.IRaffleRule;
 import org.example.domain.strategy.service.IRaffleStrategy;
 import org.example.domain.strategy.service.armory.IStrategyArmory;
 import org.example.types.enums.ResponseCode;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("${app.config.cross-origin}")
@@ -33,6 +37,10 @@ public class RaffleStrategyController implements IRaffleStrategyService {
     private IRaffleAward raffleAward;
     @Autowired
     private IRaffleStrategy raffleStrategy;
+    @Autowired
+    private IRaffleRule raffleRule;
+    @Autowired
+    private IRaffleActivityPartakeService raffleActivityPartakeService;
 
     @Override
     @GetMapping("/strategy_armory")
@@ -61,21 +69,41 @@ public class RaffleStrategyController implements IRaffleStrategyService {
     public Response<List<RaffleAwardListVO>> queryRaffleAwardList(@RequestBody RaffleAwardListDTO raffleAwardListDTO) {
         try {
             log.info("查询奖品列表,raffleAwardListDto:{}", JSON.toJSONString(raffleAwardListDTO));
-            List<StrategyAwardEntity> strategyAwardEntities = raffleAward.queryStrategyAwardList(raffleAwardListDTO.getStrategyId());
+            //1、参数校验
+            if(null==raffleAwardListDTO.getActivityId()||StringUtils.isBlank(raffleAwardListDTO.getUserId())){
+                throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+            }
+            //2、查询奖品配置
+            List<StrategyAwardEntity> strategyAwardEntities = raffleAward.queryStrategyAwardListByActivityId(raffleAwardListDTO.getActivityId());
+            //3、获取规则配置
+            String[] treeIds = strategyAwardEntities.stream()
+                    .map(StrategyAwardEntity::getRuleModels)
+                    .filter(ruleModels -> !ruleModels.isEmpty() && ruleModels != null)
+                    .toArray(String[]::new);
+            //4、查询规则配置-获取奖品解锁次数
+            Map<String, Integer> awardRuleLockCount = raffleRule.queryAwardRuleLockCount(treeIds);
+            //5、查询用户参与次数
+            Integer dayPartakeCount = raffleActivityPartakeService.queryRaffleActivityAccountDayPartakeCount(raffleAwardListDTO.getUserId(), raffleAwardListDTO.getActivityId());
             ArrayList<RaffleAwardListVO> raffleAwardListVO = new ArrayList<>(strategyAwardEntities.size());
             for (StrategyAwardEntity strategyAwardEntity : strategyAwardEntities) {
+                Integer awardRaffleLockCount = awardRuleLockCount.get(strategyAwardEntity.getRuleModels());
                 raffleAwardListVO.add(RaffleAwardListVO.builder()
                         .awardId(strategyAwardEntity.getAwardId())
                         .awardTitle(strategyAwardEntity.getAwardTitle())
                         .awardSubtitle(strategyAwardEntity.getAwardSubtitle())
                         .sort(strategyAwardEntity.getSort())
+                        .awardRuleLockCount(awardRaffleLockCount)
+                        .isAwardUnlock(awardRaffleLockCount == null || dayPartakeCount >= awardRaffleLockCount)
+                        .waitUnlockCount(awardRaffleLockCount == null || dayPartakeCount >= awardRaffleLockCount ? 0 : dayPartakeCount - awardRaffleLockCount)
                         .build());
             }
-            log.info("查询奖品列表完成,raffleAwardListVO:{}", JSON.toJSONString(raffleAwardListVO));
-            return Response.<List<RaffleAwardListVO>>builder().code(ResponseCode.SUCCESS.getCode())
+            Response<List<RaffleAwardListVO>> response = Response.<List<RaffleAwardListVO>>builder()
+                    .code(ResponseCode.SUCCESS.getCode())
                     .info(ResponseCode.SUCCESS.getInfo())
                     .data(raffleAwardListVO)
                     .build();
+            log.info("查询抽奖奖品列表配置完成 userId:{} activityId：{} response: {}", raffleAwardListDTO.getUserId(), raffleAwardListDTO.getActivityId(), JSON.toJSONString(response));
+            return response;
         } catch (Exception e) {
             log.error("查询奖品列表失败,raffleAwardListDto:{}", JSON.toJSONString(raffleAwardListDTO));
             return Response.<List<RaffleAwardListVO>>builder().code(ResponseCode.UN_ERROR.getCode())

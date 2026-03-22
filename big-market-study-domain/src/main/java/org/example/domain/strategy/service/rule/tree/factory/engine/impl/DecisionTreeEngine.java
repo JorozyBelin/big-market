@@ -1,5 +1,6 @@
 package org.example.domain.strategy.service.rule.tree.factory.engine.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
      * @return
      */
     @Override
-    public DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId) {
+    public DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId, Date endDatetime) {
         DefaultTreeFactory.StrategyAwardVO strategyAwardData = null;
 
         //1. 获取根节点、节点信息
@@ -47,7 +48,7 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
             ILogicTreeNode logicTreeNode = treeNodeGroup.get(ruleTreeNodeVO.getRuleKey());
             String ruleValue = ruleTreeNodeVO.getRuleValue();
             //计算决策树节点
-            DefaultTreeFactory.TreeActionEntity treeActionEntity = logicTreeNode.logic(userId, strategyId, awardId, ruleValue);
+            DefaultTreeFactory.TreeActionEntity treeActionEntity = logicTreeNode.logic(userId, strategyId, awardId, ruleValue, endDatetime);
             RuleLogicCheckTypeVO ruleLogicCheckType = treeActionEntity.getRuleLogicCheckType();
             strategyAwardData = treeActionEntity.getStrategyAwardVO();
             log.info("决策树引擎【{}】treeId:{} node:{} code:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(), nextNode, ruleLogicCheckType.getCode());

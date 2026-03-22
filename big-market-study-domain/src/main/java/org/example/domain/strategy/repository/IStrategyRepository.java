@@ -7,6 +7,7 @@ import org.example.domain.strategy.model.vo.RuleTreeVO;
 import org.example.domain.strategy.model.vo.StrategyAwardRuleModelVO;
 import org.example.domain.strategy.model.vo.StrategyAwardStockKeyVO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +52,10 @@ public interface IStrategyRepository {
      * 扣减奖品库存
      *
      * @param cacheKey redis key
+     * @param endDateTime 奖品库存到期时间
      * @return 扣减结果
      */
-    boolean subtractionAwardStock(String cacheKey);
+    boolean subtractionAwardStock(String cacheKey, Date endDateTime);
 
     /**
      * 奖品库存消费队列
@@ -102,4 +104,17 @@ public interface IStrategyRepository {
      * @return 用户抽奖次数
      */
     Integer queryTodayUserRaffleCount(String userId, Long strategyId);
+
+    /**
+     * 根据活动ID查询奖品列表
+     */
+    List<StrategyAwardEntity> queryStrategyAwardListByActivityId(Long activityId);
+
+    /**
+     * 查询规则树模型锁数量
+     *
+     * @param treeIds 规则树ID列表
+     * @return 规则树模型锁数量
+     */
+    Map<String, Integer> queryAwardRuleLockCount(String[] treeIds);
 }
