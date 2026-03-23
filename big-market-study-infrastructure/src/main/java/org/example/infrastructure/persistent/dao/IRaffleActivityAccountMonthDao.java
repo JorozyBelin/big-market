@@ -33,4 +33,12 @@ public interface IRaffleActivityAccountMonthDao {
      */
     @DBRouter
     RaffleActivityAccountMonth queryActivityAccountMonthByUserId(RaffleActivityAccountMonth raffleActivityAccountMonthReq);
+
+    /**
+     * 添加抽奖活动账户表-月次数
+     *
+     * @param raffleActivityAccountMonth
+     * @return
+     */
+    void addAccountQuota(RaffleActivityAccountMonth raffleActivityAccountMonth);
 }

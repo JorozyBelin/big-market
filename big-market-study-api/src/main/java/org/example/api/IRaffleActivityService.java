@@ -20,4 +20,10 @@ public interface IRaffleActivityService {
      */
     Response<ActivityDrawVO> draw(ActivityDrawDTO request);
 
+    /**
+     * 签到返利
+     * @param userId 用户ID
+     * @return 返回结果
+     */
+    Response<Boolean> calendarSignRebate(String userId);
 }

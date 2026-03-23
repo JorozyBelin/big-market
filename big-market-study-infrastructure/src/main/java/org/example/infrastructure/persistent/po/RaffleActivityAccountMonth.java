@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RaffleActivityAccountMonth {
-
+    private SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM");
     /** 自增ID */
     private String id;
     /** 用户ID */
@@ -32,5 +33,7 @@ public class RaffleActivityAccountMonth {
     private Date createTime;
     /** 更新时间 */
     private Date updateTime;
-
+    public String currentMonth(){
+        return simpleDateFormat.format(new Date());
+    }
 }

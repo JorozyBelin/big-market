@@ -10,7 +10,6 @@ import org.example.domain.activity.model.vo.ActivitySkuStockKeyVO;
 import org.example.domain.activity.model.vo.ActivityStateVO;
 import org.example.domain.activity.model.vo.UserRaffleOrderStateVO;
 import org.example.domain.activity.repository.IActivityRepository;
-import org.example.domain.activity.service.quota.RaffleActivityService;
 import org.example.infrastructure.persistent.dao.*;
 import org.example.infrastructure.persistent.event.EventPublisher;
 import org.example.infrastructure.persistent.po.*;
@@ -20,7 +19,6 @@ import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -146,7 +144,7 @@ public class ActivityRepository implements IActivityRepository {
             raffleActivityOrder.setState(activityOrderEntity.getState().getCode());
             raffleActivityOrder.setOutBusinessNo(activityOrderEntity.getOutBusinessNo());
 
-            // 账户对象
+            // 账户对象 -总
             RaffleActivityAccount raffleActivityAccount = new RaffleActivityAccount();
             raffleActivityAccount.setUserId(createQuotaOrderAggregate.getUserId());
             raffleActivityAccount.setActivityId(createQuotaOrderAggregate.getActivityId());
@@ -157,6 +155,23 @@ public class ActivityRepository implements IActivityRepository {
             raffleActivityAccount.setMonthCount(createQuotaOrderAggregate.getMonthCount());
             raffleActivityAccount.setMonthCountSurplus(createQuotaOrderAggregate.getMonthCount());
 
+            // 账户对象 - 月
+            RaffleActivityAccountMonth raffleActivityAccountMonth = new RaffleActivityAccountMonth();
+            raffleActivityAccountMonth.setUserId(createQuotaOrderAggregate.getUserId());
+            raffleActivityAccountMonth.setActivityId(createQuotaOrderAggregate.getActivityId());
+            raffleActivityAccountMonth.setMonth(raffleActivityAccountMonth.currentMonth());
+            raffleActivityAccountMonth.setMonthCount(createQuotaOrderAggregate.getMonthCount());
+            raffleActivityAccountMonth.setMonthCountSurplus(createQuotaOrderAggregate.getMonthCount());
+
+            // 账户对象 - 日
+            RaffleActivityAccountDay raffleActivityAccountDay = new RaffleActivityAccountDay();
+            raffleActivityAccountDay.setUserId(createQuotaOrderAggregate.getUserId());
+            raffleActivityAccountDay.setActivityId(createQuotaOrderAggregate.getActivityId());
+            raffleActivityAccountDay.setDay(raffleActivityAccountDay.currentDay());
+            raffleActivityAccountDay.setDayCount(createQuotaOrderAggregate.getDayCount());
+            raffleActivityAccountDay.setDayCountSurplus(createQuotaOrderAggregate.getDayCount());
+
+
             // 以用户ID作为切分键，通过 doRouter 设定路由【这样就保证了下面的操作，都是同一个链接下，也就保证了事务的特性】
             dbRouter.doRouter(createQuotaOrderAggregate.getUserId());
             // 编程式事务
@@ -164,12 +179,16 @@ public class ActivityRepository implements IActivityRepository {
                 try {
                     // 1. 写入订单
                     raffleActivityOrderDao.insert(raffleActivityOrder);
-                    // 2. 更新账户
+                    // 2. 更新账户 -总
                     int count = raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);
                     // 3. 创建账户 - 更新为0，则账户不存在，创新新账户。
                     if (0 == count) {
                         raffleActivityAccountDao.insert(raffleActivityAccount);
                     }
+                    // 4. 更新账户 -月
+                    raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);
+                    // 5. 更新账户 -日
+                    raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);
                     return 1;
                 } catch (DuplicateKeyException e) {
                     status.setRollbackOnly();

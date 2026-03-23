@@ -45,4 +45,10 @@ public interface IRaffleActivityAccountDayDao {
      */
     @DBRouter
     Integer queryActivityAccountDayPartakeCount(RaffleActivityAccountDay raffleActivityAccountDay);
+
+    /**
+     * 添加用户参与活动次数
+     * @param raffleActivityAccountDay
+     */
+    void addAccountQuota(RaffleActivityAccountDay raffleActivityAccountDay);
 }
