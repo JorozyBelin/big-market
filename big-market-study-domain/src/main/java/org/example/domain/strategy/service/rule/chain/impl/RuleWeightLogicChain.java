@@ -1,6 +1,7 @@
 package org.example.domain.strategy.service.rule.chain.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.domain.activity.repository.IActivityRepository;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.domain.strategy.service.armory.StrategyArmoryDispatch;
 import org.example.domain.strategy.service.rule.chain.AbstractLogicChain;
@@ -17,8 +18,7 @@ import java.util.Map;
 @Slf4j
 @Component("rule_weight")
 public class RuleWeightLogicChain extends AbstractLogicChain {
-    
-    private static Long userScore=4500L;
+
     @Autowired
     private IStrategyRepository strategyRepository;
     @Autowired
@@ -31,6 +31,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
         if (null == analyticalValueGroup || analyticalValueGroup.isEmpty()) {
             return null;
         }
+        Integer userScore =strategyRepository.queryActivityAccountTotalUseCount(userId,strategyId);
         ArrayList<Long> keys = new ArrayList<>(analyticalValueGroup.keySet());
         Collections.sort(keys);
         Long nextValue = keys.stream()

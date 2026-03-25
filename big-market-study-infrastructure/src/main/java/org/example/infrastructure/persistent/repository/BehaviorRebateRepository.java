@@ -75,6 +75,7 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
                         userBehaviorRebateOrder.setUserId(userId);
                         userBehaviorRebateOrder.setOrderId(behaviorRebateOrderEntity.getOrderId());
                         userBehaviorRebateOrder.setBizId(behaviorRebateOrderEntity.getBizId());
+                        userBehaviorRebateOrder.setOutBusinessNo(behaviorRebateOrderEntity.getOutBusinessNo());
                         userBehaviorRebateOrderDao.insert(userBehaviorRebateOrder);
                         //任务对象
                         TaskEntity taskEntity = behaviorRebateAggregate.getTaskEntity();
@@ -111,5 +112,28 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
                 throw new AppException(ResponseCode.UN_ERROR.getCode(), e);
             }
         }
+    }
+
+    @Override
+    public List<BehaviorRebateOrderEntity> queryUserBehaviorRebateOrderByOutBusinessNo(String userId, String outBusinessNo) {
+        UserBehaviorRebateOrder userBehaviorRebateOrderReq = new UserBehaviorRebateOrder();
+        userBehaviorRebateOrderReq.setOutBusinessNo(outBusinessNo);
+        userBehaviorRebateOrderReq.setUserId(userId);
+        List<BehaviorRebateOrderEntity> behaviorRebateOrderEntities = new ArrayList<>();
+        List<UserBehaviorRebateOrder> userBehaviorRebateOrders = userBehaviorRebateOrderDao.queryUserBehaviorRebateOrderByOutBusinessNo(userBehaviorRebateOrderReq);
+        for (UserBehaviorRebateOrder userBehaviorRebateOrder : userBehaviorRebateOrders) {
+            BehaviorRebateOrderEntity behaviorRebateOrderEntity = BehaviorRebateOrderEntity.builder()
+                    .behaviorType(userBehaviorRebateOrder.getBehaviorType())
+                    .bizId(userBehaviorRebateOrder.getBizId())
+                    .orderId(userBehaviorRebateOrder.getOrderId())
+                    .outBusinessNo(userBehaviorRebateOrder.getOutBusinessNo())
+                    .rebateConfig(userBehaviorRebateOrder.getRebateConfig())
+                    .rebateDesc(userBehaviorRebateOrder.getRebateDesc())
+                    .rebateType(userBehaviorRebateOrder.getRebateType())
+                    .userId(userBehaviorRebateOrder.getUserId())
+                    .build();
+                    behaviorRebateOrderEntities.add(behaviorRebateOrderEntity);
+        }
+        return behaviorRebateOrderEntities;
     }
 }

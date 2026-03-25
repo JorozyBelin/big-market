@@ -1,4 +1,4 @@
-package org.example.api.vo;
+package org.example.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class RaffleAwardListVO {
+public class RaffleAwardListResponseDTO {
     // 奖品ID
     private Integer awardId;
     // 奖品标题

@@ -122,4 +122,6 @@ public interface IActivityRepository {
      * @return
      */
     Integer queryActivityAccountDayPartakeCount(String userId, Long activityId);
+
+    Integer queryActivityAccountPartakeCount(Long activityId, String userId);
 }

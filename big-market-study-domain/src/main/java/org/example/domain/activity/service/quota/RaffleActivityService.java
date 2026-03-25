@@ -76,4 +76,20 @@ public class RaffleActivityService extends AbstractRaffleActivity implements IRa
     public void clearActivitySkuStock(Long sku) {
         activityRepository.clearActivitySkuStock(sku);
     }
+
+    @Override
+    public Integer queryRaffleActivityAccountPartakeCount(Long activityId, String userId) {
+        return activityRepository.queryActivityAccountPartakeCount(activityId, userId);
+    }
+
+    @Override
+    public Integer queryRaffleActivityAccountDayPartakeCount(Long activityId, String userId) {
+        return activityRepository.queryActivityAccountDayPartakeCount(userId,activityId);
+    }
+
+    @Override
+    public ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId) {
+        return activityRepository.queryActivityAccountByUserId(userId,activityId);
+    }
+
 }

@@ -9,6 +9,7 @@ import org.example.domain.award.model.entity.UserAwardRecordEntity;
 import org.example.domain.award.repository.IAwardRepository;
 import org.example.infrastructure.persistent.dao.ITaskDao;
 import org.example.infrastructure.persistent.dao.IUserAwardRecordDao;
+import org.example.infrastructure.persistent.dao.IUserRaffleOrderDao;
 import org.example.infrastructure.persistent.event.EventPublisher;
 import org.example.infrastructure.persistent.po.Task;
 import org.example.infrastructure.persistent.po.UserAwardRecord;
@@ -33,6 +34,8 @@ public class AwardRepository implements IAwardRepository {
     private ITaskDao taskDao;
     @Resource
     private EventPublisher eventPublisher;
+    @Resource
+    private IUserRaffleOrderDao userRaffleOrderDao;
 
     @Override
     public void saveUserAwardRecord(UserAwardRecordAggregate userAwardRecordAggregate) {
@@ -68,6 +71,8 @@ public class AwardRepository implements IAwardRepository {
                     userAwardRecordDao.insert(userAwardRecord);
                     // 写入任务
                     taskDao.insert(task);
+                    //更新用户订单状态
+                    userRaffleOrderDao.updateUserRaffleOrderState(userId, activityId);
                     return 1;
 
                 }catch(DuplicateKeyException e){

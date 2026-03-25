@@ -52,5 +52,14 @@ public interface IRaffleActivityAccountDao {
      */
     @DBRouter
     RaffleActivityAccount queryActivityAccountByUserId(RaffleActivityAccount raffleActivityAccountReq);
+
+    /**
+     * 根据活动ID查询活动账户
+     *
+     * @param raffleActivityAccountReq
+     * @return
+     */
+    @DBRouter
+    RaffleActivityAccount queryActivityAccount(RaffleActivityAccount raffleActivityAccountReq);
 }
 

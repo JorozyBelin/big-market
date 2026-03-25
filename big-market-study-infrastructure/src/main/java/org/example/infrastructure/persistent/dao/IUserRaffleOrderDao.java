@@ -24,4 +24,11 @@ public interface IUserRaffleOrderDao {
      * @param build
      */
     void insert(UserRaffleOrder build);
+
+    /**
+     * 更新用户抽奖订单
+     * @param userId
+     * @param activityId
+     */
+    void updateUserRaffleOrderState(String userId, Long activityId);
 }

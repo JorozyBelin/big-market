@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.example.domain.award.model.vo.AwardStateVO;
 
 import java.util.Date;
+/**
+ * 用户奖品记录
+ */
 
 @Data
 @NoArgsConstructor

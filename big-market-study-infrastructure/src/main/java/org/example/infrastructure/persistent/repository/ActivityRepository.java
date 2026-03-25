@@ -475,4 +475,15 @@ public class ActivityRepository implements IActivityRepository {
         return dayPartakeCount==null ? 0 :dayPartakeCount;
     }
 
+    @Override
+    public Integer queryActivityAccountPartakeCount(Long activityId, String userId) {
+        RaffleActivityAccount raffleActivityAccount = raffleActivityAccountDao.queryActivityAccountByUserId(RaffleActivityAccount.builder()
+                .activityId(activityId)
+                .userId(userId)
+                .build());
+        if (null == raffleActivityAccount) return 0;
+        return raffleActivityAccount.getTotalCount() - raffleActivityAccount.getTotalCountSurplus();
+    }
+
+
 }

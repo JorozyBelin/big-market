@@ -1,6 +1,7 @@
 package org.example.domain.rebate.repository;
 
 import org.example.domain.rebate.model.aggregate.BehaviorRebateAggregate;
+import org.example.domain.rebate.model.entity.BehaviorRebateOrderEntity;
 import org.example.domain.rebate.model.vo.BehaviorTypeVO;
 import org.example.domain.rebate.model.vo.DailyBehaviorRebateVO;
 
@@ -21,4 +22,12 @@ public interface IBehaviorRebateRepository {
      * @param behaviorRebateAggregates
      */
     void saveUserRebateRecord(String userId, ArrayList<BehaviorRebateAggregate> behaviorRebateAggregates);
+
+    /**
+     * 根据业务单号查询用户返利订单
+     * @param userId
+     * @param outBusinessNo
+     * @return
+     */
+    List<BehaviorRebateOrderEntity> queryUserBehaviorRebateOrderByOutBusinessNo(String userId, String outBusinessNo);
 }
