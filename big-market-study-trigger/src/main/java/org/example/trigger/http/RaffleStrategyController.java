@@ -165,7 +165,7 @@ public class RaffleStrategyController implements IRaffleStrategyService {
             log.info("随机抽奖开始 strategyId: {}", raffleStrategyRequestDTO.getStrategyId());
             // 调用抽奖接口
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
-                    .userId("system")
+                    .userId(raffleStrategyRequestDTO.getUserId())
                     .strategyId(raffleStrategyRequestDTO.getStrategyId())
                     .build());
             // 封装返回结果

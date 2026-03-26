@@ -15,4 +15,6 @@ public interface IUserAwardRecordDao {
      * @param userAwardRecord
      */
     void insert(UserAwardRecord userAwardRecord);
+
+    int updateAwardRecordCompletedState(UserAwardRecord userAwardRecord);
 }

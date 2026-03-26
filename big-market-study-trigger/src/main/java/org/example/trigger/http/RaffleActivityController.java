@@ -126,6 +126,7 @@ public class RaffleActivityController implements IRaffleActivityService {
                     .awardTitle(raffleAwardEntity.getAwardTitle())
                     .awardTime(new Date())
                     .awardState(AwardStateVO.create)
+                    .awardConfig(raffleAwardEntity.getAwardConfig())
                     .build();
             awardService.saveUserAwardRecord(userAwardRecord);
             // 5. 返回结果
@@ -185,6 +186,7 @@ public class RaffleActivityController implements IRaffleActivityService {
         }
     }
 
+    @RequestMapping(value="is_calendar_sign_rebate",method=RequestMethod.POST)
     @Override
     public Response<Boolean> isCalendarSignRebate(String userId) {
         try{

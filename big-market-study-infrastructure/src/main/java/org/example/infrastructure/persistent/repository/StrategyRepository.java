@@ -297,7 +297,7 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public Integer queryTodayUserRaffleCount(String userId, Long strategyId) {
         // 活动ID
-        Long activityId = raffleActivityAccountDayDao.queryActivityIdByStrategyId(strategyId);
+        Long activityId = raffleActivityDao.queryActivityIdByStrategyId(strategyId);
         // 封装参数
         RaffleActivityAccountDay raffleActivityAccountDayReq = new RaffleActivityAccountDay();
         raffleActivityAccountDayReq.setUserId(userId);
@@ -331,7 +331,7 @@ public class StrategyRepository implements IStrategyRepository {
 
     @Override
     public Integer queryActivityAccountTotalUseCount(String userId, Long strategyId) {
-        Long activityId = raffleActivityAccountDayDao.queryActivityIdByStrategyId(strategyId);
+        Long activityId = raffleActivityDao.queryActivityIdByStrategyId(strategyId);
         RaffleActivityAccount raffleActivityAccountReq = new RaffleActivityAccount();
         raffleActivityAccountReq.setUserId(userId);
         raffleActivityAccountReq.setActivityId(activityId);

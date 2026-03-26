@@ -31,14 +31,6 @@ public interface IRaffleActivityAccountDayDao {
     RaffleActivityAccountDay queryActivityAccountDayByUserId(RaffleActivityAccountDay raffleActivityAccountDayReq);
 
     /**
-     * 查询活动ID
-     * @param strategyId
-     * @return
-     */
-    @DBRouter
-    Long queryActivityIdByStrategyId(Long strategyId);
-
-    /**
      * 查询用户参与活动次数
      * @param raffleActivityAccountDay
      * @return
