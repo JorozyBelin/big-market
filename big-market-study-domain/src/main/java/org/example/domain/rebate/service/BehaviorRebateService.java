@@ -76,7 +76,6 @@ public class BehaviorRebateService implements IBehaviorRebateService {
         });
         //存储聚合对象订单信息
         behaviorRebateRepository.saveUserRebateRecord(behaviorEntity.getUserId(), behaviorRebateAggregates);
-
         return orderIds;
 
     }

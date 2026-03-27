@@ -63,12 +63,6 @@ public class RebateMessageCustomer {
                     creditAdjustService.createOrder(tradeEntity);
                     break;
             }
-            SkuRechargeEntity skuRechargeEntity = new SkuRechargeEntity();
-            skuRechargeEntity.setUserId(rebateMessage.getUserId());
-            skuRechargeEntity.setOutBusinessNo(rebateMessage.getBizId());
-            skuRechargeEntity.setSku(Long.valueOf(rebateMessage.getRebateConfig()));
-
-            raffleActivityAccountQuotaService.createOrder(skuRechargeEntity);
         } catch (AppException e) {
             if (ResponseCode.INDEX_DUP.getCode().equals(e.getCode())) {
                 log.warn("监听用户行为返利消息，消费重复 topic: {} message: {}", topic, message, e);
