@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 
 public enum TaskStateVO {
-    create("create", "创建"),
+    create("createOrder", "创建"),
     complete("complete", "发送完成"),
     fail("fail", "发送失败"),
     ;

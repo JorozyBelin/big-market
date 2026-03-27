@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ActivityStateVO {
 
-    create("create", "创建"),
+    create("createOrder", "创建"),
     open("open", "开启"),
     close("close", "关闭"),
     ;

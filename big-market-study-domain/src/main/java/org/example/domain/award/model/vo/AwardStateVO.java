@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AwardStateVO {
-    create("create","创建"),
+    create("createOrder","创建"),
     complete("complete","发奖完成"),
     fail("fail","发奖失败");
 

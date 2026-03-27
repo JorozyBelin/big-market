@@ -25,7 +25,7 @@ public class TaskEntity {
     private String messageId;
     /** 消息主体 */
     private BaseEvent.EventMessage<SendRebateMessageEvent.RebateMessage> message;
-    /** 任务状态；create-创建、completed-完成、fail-失败 */
+    /** 任务状态；createOrder-创建、completed-完成、fail-失败 */
     private TaskStateVO state;
 
 }

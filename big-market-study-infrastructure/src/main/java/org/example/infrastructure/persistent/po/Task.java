@@ -20,7 +20,7 @@ public class Task {
     private String topic;
     /** 消息主体 */
     private String message;
-    /** 任务状态；create-创建、completed-完成、fail-失败 */
+    /** 任务状态；createOrder-创建、completed-完成、fail-失败 */
     private String state;
     /** 创建时间 */
     private Date createTime;

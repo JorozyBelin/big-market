@@ -32,6 +32,6 @@ public class UserAwardRecordEntity {
     private String awardConfig;
     /** 中奖时间 */
     private Date awardTime;
-    /** 奖品状态；create-创建、completed-发奖完成 */
+    /** 奖品状态；createOrder-创建、completed-发奖完成 */
     private AwardStateVO awardState;
 }
