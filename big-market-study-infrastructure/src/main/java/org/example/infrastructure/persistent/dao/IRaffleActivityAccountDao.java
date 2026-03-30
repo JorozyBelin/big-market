@@ -61,5 +61,7 @@ public interface IRaffleActivityAccountDao {
      */
     @DBRouter
     RaffleActivityAccount queryActivityAccount(RaffleActivityAccount raffleActivityAccountReq);
+
+    RaffleActivityAccount queryAccountByUserId(RaffleActivityAccount raffleActivityAccount);
 }
 

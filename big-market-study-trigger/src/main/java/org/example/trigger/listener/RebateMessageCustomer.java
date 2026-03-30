@@ -10,7 +10,6 @@ import org.example.domain.credit.model.vo.TradeNameVO;
 import org.example.domain.credit.model.vo.TradeTypeVO;
 import org.example.domain.credit.service.ICreditAdjustService;
 import org.example.domain.rebate.event.SendRebateMessageEvent;
-import org.example.domain.rebate.model.vo.RebateTypeVO;
 import org.example.types.enums.ResponseCode;
 import org.example.types.event.BaseEvent;
 import org.example.types.exception.AppException;
@@ -50,7 +49,6 @@ public class RebateMessageCustomer {
                     skuRechargeEntity.setUserId(rebateMessage.getUserId());
                     skuRechargeEntity.setOutBusinessNo(rebateMessage.getBizId());
                     skuRechargeEntity.setSku(Long.valueOf(rebateMessage.getRebateConfig()));
-
                     raffleActivityAccountQuotaService.createOrder(skuRechargeEntity);
                     break;
                 case "integral":
@@ -63,12 +61,6 @@ public class RebateMessageCustomer {
                     creditAdjustService.createOrder(tradeEntity);
                     break;
             }
-            SkuRechargeEntity skuRechargeEntity = new SkuRechargeEntity();
-            skuRechargeEntity.setUserId(rebateMessage.getUserId());
-            skuRechargeEntity.setOutBusinessNo(rebateMessage.getBizId());
-            skuRechargeEntity.setSku(Long.valueOf(rebateMessage.getRebateConfig()));
-
-            raffleActivityAccountQuotaService.createOrder(skuRechargeEntity);
         } catch (AppException e) {
             if (ResponseCode.INDEX_DUP.getCode().equals(e.getCode())) {
                 log.warn("监听用户行为返利消息，消费重复 topic: {} message: {}", topic, message, e);
