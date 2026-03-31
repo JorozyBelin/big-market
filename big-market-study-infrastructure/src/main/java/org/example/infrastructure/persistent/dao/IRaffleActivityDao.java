@@ -4,6 +4,7 @@ import cn.bugstack.middleware.db.router.annotation.DBRouter;
 import cn.bugstack.middleware.db.router.annotation.DBRouterStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.example.infrastructure.persistent.po.RaffleActivity;
+import org.example.infrastructure.persistent.po.RaffleActivityOrder;
 
 @Mapper
 public interface IRaffleActivityDao {

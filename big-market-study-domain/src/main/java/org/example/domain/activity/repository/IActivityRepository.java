@@ -23,31 +23,41 @@ public interface IActivityRepository {
     void doSaveOrder(CreateQuotaOrderAggregate createQuotaOrderAggregate);
 
     /**
+     * 保存积分支付订单
+     *
+     * @param createQuotaOrderAggregate 聚合对象
+     */
+    void doSaveCreditPayOrder(CreateQuotaOrderAggregate createQuotaOrderAggregate);
+
+    /**
      * 缓存活动商品库存信息
      *
      * @param sku
      * @param cacheKey   缓存key
      * @param stockCount 库存数量
      */
-    void cacheActivitySkuStockCount(Long sku,String cacheKey, Integer stockCount);
+    void cacheActivitySkuStockCount(Long sku, String cacheKey, Integer stockCount);
 
     /**
      * 扣减活动商品库存信息
      *
-     * @param sku 商品ID
-     * @param cacheKey  缓存key
+     * @param sku         商品ID
+     * @param cacheKey    缓存key
      * @param endDateTime 活动结束时间
      * @return 扣减结果
      */
-    boolean subtractionActivitySkuStock(Long sku,String cacheKey, Date endDateTime);
+    boolean subtractionActivitySkuStock(Long sku, String cacheKey, Date endDateTime);
+
     /**
      * 发送延迟队列
+     *
      * @param activitySk 缓存key
      */
     void activitySkuStockConsumeSendQueue(ActivitySkuStockKeyVO activitySk);
 
     /**
      * 获取延迟队列
+     *
      * @return 活动商品库存信息
      */
     ActivitySkuStockKeyVO takeQueueValue();
@@ -59,18 +69,21 @@ public interface IActivityRepository {
 
     /**
      * 更新活动商品库存信息
+     *
      * @param sku 商品ID
      */
     void updateActivitySkuStock(Long sku);
 
     /**
      * 清空活动商品库存信息
+     *
      * @param sku 商品ID
      */
     void clearActivitySkuStock(Long sku);
 
     /**
      * 查询未使用的订单
+     *
      * @param partakeRaffleActivityEntity 参与抽奖活动信息
      * @return 订单信息
      */
@@ -78,13 +91,15 @@ public interface IActivityRepository {
 
     /**
      * 保存聚合对象
+     *
      * @param createPartakeOrderAggregate 聚合对象
      */
     void savePartakeOrderAggregate(CreatePartakeOrderAggregate createPartakeOrderAggregate);
 
     /**
      * 查询活动账户信息
-     * @param userId 用户ID
+     *
+     * @param userId     用户ID
      * @param activityId 活动ID
      * @return 活动账户信息
      */
@@ -92,24 +107,27 @@ public interface IActivityRepository {
 
     /**
      * 查询活动账户月信息
-     * @param userId 用户ID
+     *
+     * @param userId     用户ID
      * @param activityId 活动ID
-     * @param month 月份
+     * @param month      月份
      * @return 活动账户月信息
      */
     ActivityAccountMonthEntity queryActivityAccountMonthByUserId(String userId, Long activityId, String month);
 
     /**
      * 查询活动账户日信息
-     * @param userId 用户ID
+     *
+     * @param userId     用户ID
      * @param activityId 活动ID
-     * @param day  日
+     * @param day        日
      * @return 活动账户日信息
      */
     ActivityAccountDayEntity queryActivityAccountDayByUserId(String userId, Long activityId, String day);
 
     /**
      * 查询活动商品信息
+     *
      * @param activityId 活动ID
      * @return 活动商品信息
      */
@@ -117,6 +135,7 @@ public interface IActivityRepository {
 
     /**
      * 查询用户参与活动日参与次数
+     *
      * @param userId
      * @param activityId
      * @return
@@ -124,4 +143,11 @@ public interface IActivityRepository {
     Integer queryActivityAccountDayPartakeCount(String userId, Long activityId);
 
     Integer queryActivityAccountPartakeCount(Long activityId, String userId);
+
+    /**
+     * 更新订单信息
+     *
+     * @param deliveryOrderEntity 订单信息
+     */
+    void updateOrder(DeliveryOrderEntity deliveryOrderEntity);
 }

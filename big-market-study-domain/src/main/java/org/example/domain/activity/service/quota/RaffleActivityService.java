@@ -8,10 +8,12 @@ import org.example.domain.activity.model.vo.OrderStateVO;
 import org.example.domain.activity.repository.IActivityRepository;
 import org.example.domain.activity.service.IRaffleActivityPartakeService;
 import org.example.domain.activity.service.IRaffleActivitySkuStockService;
+import org.example.domain.activity.service.quota.policy.ITradePolicy;
 import org.example.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
     抽奖活动服务
@@ -19,8 +21,8 @@ import java.util.Date;
 @Service
 public class RaffleActivityService extends AbstractRaffleActivity implements IRaffleActivitySkuStockService {
 
-    public RaffleActivityService(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory) {
-        super(activityRepository, defaultActivityChainFactory);
+    public RaffleActivityService(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory, Map<String, ITradePolicy> tradePolicyGroup) {
+        super(activityRepository, defaultActivityChainFactory,tradePolicyGroup);
     }
 
     @Override
@@ -36,9 +38,9 @@ public class RaffleActivityService extends AbstractRaffleActivity implements IRa
         activityOrderEntity.setOrderId(RandomStringUtils.randomNumeric(12));
         activityOrderEntity.setOrderTime(new Date());
         activityOrderEntity.setTotalCount(activityCountEntity.getTotalCount());
+        activityOrderEntity.setPayAmount(activitySkuEntity.getProductAmount());
         activityOrderEntity.setDayCount(activityCountEntity.getDayCount());
         activityOrderEntity.setMonthCount(activityCountEntity.getMonthCount());
-        activityOrderEntity.setState(OrderStateVO.completed);
         activityOrderEntity.setOutBusinessNo(skuRechargeEntity.getOutBusinessNo());
 
         // 构建聚合对象
@@ -90,6 +92,11 @@ public class RaffleActivityService extends AbstractRaffleActivity implements IRa
     @Override
     public ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId) {
         return activityRepository.queryActivityAccountByUserId(userId,activityId);
+    }
+
+    @Override
+    public void updateOrder(DeliveryOrderEntity deliveryOrderEntity) {
+        activityRepository.updateOrder(deliveryOrderEntity);
     }
 
 }

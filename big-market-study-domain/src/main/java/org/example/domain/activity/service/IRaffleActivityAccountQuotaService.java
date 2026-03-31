@@ -1,6 +1,7 @@
 package org.example.domain.activity.service;
 
 import org.example.domain.activity.model.entity.ActivityAccountEntity;
+import org.example.domain.activity.model.entity.DeliveryOrderEntity;
 import org.example.domain.activity.model.entity.SkuRechargeEntity;
 
 /**
@@ -46,5 +47,12 @@ public interface IRaffleActivityAccountQuotaService {
      * @return 账户实体
      */
     ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId);
+
+    /**
+     * 更新订单
+     *
+     * @param deliveryOrderEntity 订单实体
+     */
+    void updateOrder(DeliveryOrderEntity deliveryOrderEntity);
 
 }

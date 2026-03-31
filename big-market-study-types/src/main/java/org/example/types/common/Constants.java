@@ -24,6 +24,7 @@ public class Constants {
         public static String STRATEGY_RULE_WEIGHT_KEY = "strategy_rule_weight_key";
         public static String USER_CREDIT_ACCOUNT_LOCK = "user_credit_account_lock_";
         public static String ACTIVITY_ACCOUNT_LOCK = "activity_account_lock_";
+        public static String ACTIVITY_ACCOUNT_UPDATE_LOCK = "activity_account_update_lock_";
 
     }
 

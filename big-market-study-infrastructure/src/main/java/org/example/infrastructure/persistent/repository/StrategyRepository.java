@@ -225,12 +225,12 @@ public class StrategyRepository implements IStrategyRepository {
             redisService.setValue(cacheKey, 0);
         }
         String lockKey = cacheKey + Constants.UNDERLINE + surplus;
-        Boolean lock = false;
+        boolean lock = false;
         if(endDateTime!=null){
             long expireMillis = endDateTime.getTime() - System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1);
-            redisService.setNx(lockKey, expireMillis, TimeUnit.MILLISECONDS);
+            lock=redisService.setNx(lockKey, expireMillis, TimeUnit.MILLISECONDS);
         }else{
-            redisService.setNx(lockKey);
+            lock=redisService.setNx(lockKey);
         }
         if (!lock) {
             log.info("策略奖品库存加锁失败 {}", lockKey);

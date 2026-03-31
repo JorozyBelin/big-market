@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.domain.activity.model.entity.ActivityOrderEntity;
+import org.example.domain.activity.model.vo.OrderStateVO;
 
 @Data
 @Builder
@@ -36,6 +37,10 @@ public class CreateQuotaOrderAggregate {
      * 增加；月次数
      */
     private Integer monthCount;
+    /**
+     * 订单状态
+     */
+    private OrderStateVO orderState;
 
     /**
      * 活动订单实体

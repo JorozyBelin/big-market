@@ -7,16 +7,22 @@ import org.example.domain.activity.model.aggregate.CreateQuotaOrderAggregate;
 import org.example.domain.activity.model.entity.*;
 import org.example.domain.activity.repository.IActivityRepository;
 import org.example.domain.activity.service.IRaffleActivityAccountQuotaService;
+import org.example.domain.activity.service.quota.policy.ITradePolicy;
 import org.example.domain.activity.service.quota.rule.IActionChain;
 import org.example.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 
+import java.util.Map;
+
 @Slf4j
 public abstract class AbstractRaffleActivity extends RaffleActivitySupport implements IRaffleActivityAccountQuotaService {
 
-    public AbstractRaffleActivity(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory) {
+    protected final Map<String, ITradePolicy> tradePolicyGroup;
+
+    public AbstractRaffleActivity(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory,Map<String,ITradePolicy> tradePolicyGroup) {
         super(activityRepository, defaultActivityChainFactory);
+        this.tradePolicyGroup = tradePolicyGroup;
     }
 
     @Override
@@ -42,8 +48,8 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
         CreateQuotaOrderAggregate createQuotaOrderAggregate = buildOrderAggregate(skuRechargeEntity, activitySkuEntity, activityEntity, activityCountEntity);
 
         // 5. 保存订单
-        doSaveOrder(createQuotaOrderAggregate);
-
+        ITradePolicy tradePolicy = tradePolicyGroup.get(skuRechargeEntity.getOrderTradeType().getCode());
+        tradePolicy.trade(createQuotaOrderAggregate);
         // 6. 返回单号
         return createQuotaOrderAggregate.getActivityOrderEntity().getOrderId();
 

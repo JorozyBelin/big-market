@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.example.domain.activity.model.entity.SkuRechargeEntity;
+import org.example.domain.activity.model.vo.OrderTradeTypeVO;
 import org.example.domain.activity.service.IRaffleActivityAccountQuotaService;
 import org.example.domain.credit.model.entity.TradeEntity;
 import org.example.domain.credit.model.vo.TradeNameVO;
@@ -49,6 +50,7 @@ public class RebateMessageCustomer {
                     skuRechargeEntity.setUserId(rebateMessage.getUserId());
                     skuRechargeEntity.setOutBusinessNo(rebateMessage.getBizId());
                     skuRechargeEntity.setSku(Long.valueOf(rebateMessage.getRebateConfig()));
+                    skuRechargeEntity.setOrderTradeType(OrderTradeTypeVO.rebate_no_pay_trade);
                     raffleActivityAccountQuotaService.createOrder(skuRechargeEntity);
                     break;
                 case "integral":
