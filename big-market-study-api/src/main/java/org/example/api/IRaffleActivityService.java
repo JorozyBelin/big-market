@@ -1,10 +1,10 @@
 package org.example.api;
 
-import org.example.api.dto.ActivityDrawRequestDTO;
-import org.example.api.dto.ActivityDrawResponseDTO;
-import org.example.api.dto.UserActivityAccountRequestDTO;
-import org.example.api.dto.UserActivityAccountResponseDTO;
+import org.example.api.dto.*;
 import org.example.types.model.Response;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface IRaffleActivityService {
 
@@ -47,4 +47,27 @@ public interface IRaffleActivityService {
      * @return 账户信息
      */
     Response<UserActivityAccountResponseDTO> queryUserActivityAccount(UserActivityAccountRequestDTO request);
+
+    /**
+     * 查询活动商品列表
+     *
+     * @param activityId 活动ID
+     * @return 商品列表
+     */
+    Response<List<SkuProductResponseDTO>> querySkuProductListByActivityId(Long activityId);
+
+    /**
+     *  查询用户积分账户
+     * @param userId 用户ID
+     * @return 积分
+     */
+    Response<BigDecimal> queryUserCreditAccount(String userId);
+
+    /**
+     * 积分支付兑换商品
+     *
+     * @param request 购物车请求对象
+     * @return 兑换结果
+     */
+    Response<Boolean> creditPayExchangeSku(SkuProductShopCartRequestDTO  request);
 }

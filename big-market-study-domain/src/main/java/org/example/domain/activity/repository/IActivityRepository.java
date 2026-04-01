@@ -150,4 +150,12 @@ public interface IActivityRepository {
      * @param deliveryOrderEntity 订单信息
      */
     void updateOrder(DeliveryOrderEntity deliveryOrderEntity);
+
+    /**
+     * 查询商品信息
+     *
+     * @param activityId 活动ID
+     * @return 商品信息
+     */
+    List<SkuProductEntity> querySkuProductEntityListByActivityId(Long activityId);
 }

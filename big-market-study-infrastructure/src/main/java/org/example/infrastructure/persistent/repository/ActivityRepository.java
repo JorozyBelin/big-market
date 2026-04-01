@@ -229,19 +229,19 @@ public class ActivityRepository implements IActivityRepository {
         raffleActivityOrder.setPayAmount(activityOrderEntity.getPayAmount());
         raffleActivityOrder.setState(createQuotaOrderAggregate.getOrderState().getCode());
         raffleActivityOrder.setOutBusinessNo(activityOrderEntity.getOutBusinessNo());
-        try{
+        try {
             dbRouter.doRouter(createQuotaOrderAggregate.getUserId());
-            transactionTemplate.execute(status->{
-                try{
+            transactionTemplate.execute(status -> {
+                try {
                     raffleActivityOrderDao.insert(raffleActivityOrder);
                     return 1;
-                }catch(DuplicateKeyException e){
+                } catch (DuplicateKeyException e) {
                     status.setRollbackOnly();
                     log.error("写入订单记录，唯一索引冲突 userId: {} activityId: {} sku: {}", activityOrderEntity.getUserId(), activityOrderEntity.getActivityId(), activityOrderEntity.getSku(), e);
                     throw new AppException(ResponseCode.INDEX_DUP.getCode(), e);
                 }
             });
-        }finally{
+        } finally {
             dbRouter.clear();
         }
     }
@@ -532,8 +532,8 @@ public class ActivityRepository implements IActivityRepository {
 
     @Override
     public void updateOrder(DeliveryOrderEntity deliveryOrderEntity) {
-        RLock lock=redisService.getLock(Constants.RedisKey.ACTIVITY_ACCOUNT_UPDATE_LOCK + deliveryOrderEntity.getUserId());
-        try{
+        RLock lock = redisService.getLock(Constants.RedisKey.ACTIVITY_ACCOUNT_UPDATE_LOCK + deliveryOrderEntity.getUserId());
+        try {
             lock.lock(3, TimeUnit.SECONDS);
             // 查询订单
             RaffleActivityOrder raffleActivityOrderReq = new RaffleActivityOrder();
@@ -569,36 +569,60 @@ public class ActivityRepository implements IActivityRepository {
             raffleActivityAccountDay.setDayCountSurplus(raffleActivityOrderRes.getDayCount());
 
             dbRouter.doRouter(raffleActivityOrderRes.getUserId());
-            transactionTemplate.execute(status->{
-               try{
-                    int count =raffleActivityOrderDao.updateOrderCompleted(raffleActivityOrderReq);
-                    if(count!=1){
+            transactionTemplate.execute(status -> {
+                try {
+                    int count = raffleActivityOrderDao.updateOrderCompleted(raffleActivityOrderReq);
+                    if (count != 1) {
                         status.setRollbackOnly();
                         return 1;
                     }
-                   // 2. 更新账户 - 总
-                   RaffleActivityAccount raffleActivityAccountRes = raffleActivityAccountDao.queryAccountByUserId(raffleActivityAccount);
-                   if (null == raffleActivityAccountRes) {
-                       raffleActivityAccountDao.insert(raffleActivityAccount);
-                   } else {
-                       raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);
-                   }
-                   // 4. 更新账户 - 月
-                   raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);
-                   // 5. 更新账户 - 日
-                   raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);
-                   return 1;
+                    // 2. 更新账户 - 总
+                    RaffleActivityAccount raffleActivityAccountRes = raffleActivityAccountDao.queryAccountByUserId(raffleActivityAccount);
+                    if (null == raffleActivityAccountRes) {
+                        raffleActivityAccountDao.insert(raffleActivityAccount);
+                    } else {
+                        raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);
+                    }
+                    // 4. 更新账户 - 月
+                    raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);
+                    // 5. 更新账户 - 日
+                    raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);
+                    return 1;
 
-               }catch(DuplicateKeyException e){
-                   status.setRollbackOnly();
-                   log.error("更新订单记录，完成态，唯一索引冲突 userId: {} outBusinessNo: {}", deliveryOrderEntity.getUserId(), deliveryOrderEntity.getOutBusinessNo(), e);
-                   throw new AppException(ResponseCode.INDEX_DUP.getCode(), e);
-               }
+                } catch (DuplicateKeyException e) {
+                    status.setRollbackOnly();
+                    log.error("更新订单记录，完成态，唯一索引冲突 userId: {} outBusinessNo: {}", deliveryOrderEntity.getUserId(), deliveryOrderEntity.getOutBusinessNo(), e);
+                    throw new AppException(ResponseCode.INDEX_DUP.getCode(), e);
+                }
             });
-        }finally{
+        } finally {
             lock.unlock();
             dbRouter.clear();
         }
+    }
+
+    @Override
+    public List<SkuProductEntity> querySkuProductEntityListByActivityId(Long activityId) {
+        List<RaffleActivitySku> raffleActivitySkus = raffleActivitySkuDao.queryActivitySkuListByActivityId(activityId);
+        ArrayList<SkuProductEntity> skuProductEntities = new ArrayList<>();
+        for (RaffleActivitySku activitySku : raffleActivitySkus) {
+            RaffleActivityCount raffleActivityCount = raffleActivityCountDao.queryRaffleActivityCountByActivityCountId(activitySku.getActivityCountId());
+            SkuProductEntity skuProductEntity = SkuProductEntity.builder()
+                    .sku(activitySku.getSku())
+                    .activityId(activitySku.getActivityId())
+                    .activityCountId(activitySku.getActivityCountId())
+                    .stockCount(activitySku.getStockCount())
+                    .stockCountSurplus(activitySku.getStockCountSurplus())
+                    .productAmount(activitySku.getProductAmount())
+                    .activityCount(SkuProductEntity.ActivityCount.builder()
+                            .dayCount(raffleActivityCount.getDayCount())
+                            .monthCount(raffleActivityCount.getMonthCount())
+                            .totalCount(raffleActivityCount.getTotalCount())
+                            .build())
+                    .build();
+            skuProductEntities.add(skuProductEntity);
+        }
+        return skuProductEntities;
     }
 
 

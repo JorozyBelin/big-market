@@ -26,7 +26,7 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
     }
 
     @Override
-    public String createOrder(SkuRechargeEntity skuRechargeEntity) {
+    public UnpaidActivityOrderEntity createOrder(SkuRechargeEntity skuRechargeEntity) {
         //1、参数校验
         String userId = skuRechargeEntity.getUserId();
         Long sku = skuRechargeEntity.getSku();
@@ -51,8 +51,13 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
         ITradePolicy tradePolicy = tradePolicyGroup.get(skuRechargeEntity.getOrderTradeType().getCode());
         tradePolicy.trade(createQuotaOrderAggregate);
         // 6. 返回单号
-        return createQuotaOrderAggregate.getActivityOrderEntity().getOrderId();
-
+        ActivityOrderEntity activityOrderEntity = createQuotaOrderAggregate.getActivityOrderEntity();
+        return UnpaidActivityOrderEntity.builder()
+                .orderId(activityOrderEntity.getOrderId())
+                .payAmount(activityOrderEntity.getPayAmount())
+                .outBusinessNo(outBusinessNo)
+                .userId(userId)
+                .build();
     }
     protected abstract CreateQuotaOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity);
 

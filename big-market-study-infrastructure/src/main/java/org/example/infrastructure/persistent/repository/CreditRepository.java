@@ -42,6 +42,7 @@ public class CreditRepository implements ICreditRepository {
     private ITaskDao taskDao;
     @Resource
     private EventPublisher eventPublisher;
+
     @Override
     public void saveUserCreditTradeOrder(TradeAggregate tradeAggregate) {
         String userId = tradeAggregate.getUserId();
@@ -73,13 +74,12 @@ public class CreditRepository implements ICreditRepository {
         task.setState(taskEntity.getState().getCode());
 
 
-
         RLock lock = redisService.getLock(Constants.RedisKey.USER_CREDIT_ACCOUNT_LOCK + userId + Constants.UNDERLINE + creditOrderEntity.getOutBusinessNo());
         lock.lock();
-        try{
+        try {
             dbRouter.doRouter(userId);
-            transactionTemplate.execute(status->{
-                try{
+            transactionTemplate.execute(status -> {
+                try {
                     // 1. 保存账户积分
                     UserCreditAccount userCreditAccount = userCreditAccountDao.queryUserCreditAccount(userCreditAccountReq);
                     if (null == userCreditAccount) {
@@ -91,29 +91,44 @@ public class CreditRepository implements ICreditRepository {
                     userCreditOrderDao.insert(userCreditOrderReq);
                     //3.写入任务
                     taskDao.insert(task);
-            }catch(DuplicateKeyException e) {
+                } catch (DuplicateKeyException e) {
                     status.setRollbackOnly();
                     log.error("调整账户积分额度异常，唯一索引冲突 userId:{} orderId:{}", userId, creditOrderEntity.getOrderId(), e);
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     status.setRollbackOnly();
                     log.error("调整账户积分额度失败 userId:{} orderId:{}", userId, creditOrderEntity.getOrderId(), e);
                 }
                 return 1;
-        });
-        }finally{
+            });
+        } finally {
             dbRouter.clear();
             lock.unlock();
         }
-        try{
+        try {
             // 发送消息【在事务外执行，如果失败还有任务补偿】
-            eventPublisher.publish(task.getTopic(),task.getMessage());
+            eventPublisher.publish(task.getTopic(), task.getMessage());
             // 更新数据库记录，task 任务表
             taskDao.updateTaskSendMessageComplete(task);
             log.info("调整账户积分记录，发送MQ消息完成 userId: {} orderId:{} topic: {}", userId, creditOrderEntity.getOrderId(), task.getTopic());
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("调整账户积分记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
             taskDao.updateTaskSendMessageFail(task);
+        }
+    }
+
+    @Override
+    public CreditAccountEntity queryUserCreditAccount(String userId) {
+        UserCreditAccount userCreditAccountReq = new UserCreditAccount();
+        userCreditAccountReq.setUserId(userId);
+        try {
+            dbRouter.doRouter(userId);
+            UserCreditAccount userCreditAccount = userCreditAccountDao.queryUserCreditAccount(userCreditAccountReq);
+            return CreditAccountEntity.builder()
+                    .userId(userCreditAccount.getUserId())
+                    .adjustAmount(userCreditAccount.getAvailableAmount())
+                    .build();
+        } finally {
+            dbRouter.clear();
         }
     }
 }
