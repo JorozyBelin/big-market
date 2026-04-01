@@ -7,6 +7,7 @@ import org.example.domain.credit.model.aggregate.TradeAggregate;
 import org.example.domain.credit.model.entity.CreditAccountEntity;
 import org.example.domain.credit.model.entity.CreditOrderEntity;
 import org.example.domain.credit.model.entity.TaskEntity;
+import org.example.domain.credit.model.vo.TradeTypeVO;
 import org.example.domain.credit.repository.ICreditRepository;
 import org.example.infrastructure.persistent.dao.ITaskDao;
 import org.example.infrastructure.persistent.dao.IUserCreditAccountDao;
@@ -84,8 +85,10 @@ public class CreditRepository implements ICreditRepository {
                     UserCreditAccount userCreditAccount = userCreditAccountDao.queryUserCreditAccount(userCreditAccountReq);
                     if (null == userCreditAccount) {
                         userCreditAccountDao.insert(userCreditAccountReq);
-                    } else {
+                    } else if(userCreditOrderReq.getTradeType().equals(TradeTypeVO.FORWARD.getCode())){
                         userCreditAccountDao.updateAddAmount(userCreditAccountReq);
+                    }else if(userCreditOrderReq.getTradeType().equals(TradeTypeVO.REVERSE.getCode())){
+                        userCreditAccountDao.updateSubAmount(userCreditAccountReq);
                     }
                     // 2. 保存账户订单
                     userCreditOrderDao.insert(userCreditOrderReq);
